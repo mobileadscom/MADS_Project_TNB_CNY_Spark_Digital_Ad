@@ -400,6 +400,7 @@ class AdUnit extends Mads {
   events() {
     this.elems['btn-start-game'].addEventListener('mousedown', () => {
       this.tracker('E', 'start_game');
+      this.elems['game-page'].style.display = 'none';
       this.elems.gameContainer.style.zIndex = 200;
       this.loadJS(this.resolve('js/game.js')).then(() => {
         console.log(typeof window.game !== 'undefined' ? 'game loaded' : 'game not loaded');
