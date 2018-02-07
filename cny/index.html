@@ -1,0 +1,148 @@
+
+<!--<div style="width:100%;height:100%;position:absolute;">-->
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="css/game.css" rel="stylesheet">
+	<script type="text/javascript" src="js/game.js"></script>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Lato');
+	</style>
+	<style>
+		html, body {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+<div class="game" id="gameContainer">
+	<div class="status">
+		<div class="found-wrapper">
+			<div class="found">
+				<p class="title">Found</p>
+				<div class="count" id="gameFoundCount">
+					0/10
+				</div>
+			</div>
+		</div>
+		<div class="timer-wrapper">
+			<div class="timer">
+				<div class="time-wrapper">
+					<div class="time">
+						<p class="title">Time Left</p>
+						<div class="sec" id="gameTimer">
+							1:00
+						</div>
+					</div>
+				</div>
+				<div class="space">
+				</div>
+				<div class="bar-wrapper">
+					<div class="bar" id="gameTimeBar">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="skip-wrapper">
+			<button class="skip" id="gameSkip">
+				SKIP
+			</button>
+		</div>
+	</div>
+	<div class="pic">
+		<div class="img-wrapper" id="gameBgWrapper">
+		</div>
+	</div>
+	<div class="item-status">
+		<div class="btn-wrapper" style="position: relative;">
+			<button class="up-btn" style="position: absolute;bottom: 0px;">
+				<img src="img/arrow-up.png" />
+			</button>
+		</div>
+		<div class="items-wrapper" id="gameItemListWrapper">
+			<div class="items" id="gameItemList">
+				<div class="item">
+					<div class="item-wrapper" rel="0" id="gameItem0">
+						<img src="img/item1.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="1" id="gameItem1">
+						<img src="img/item2.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="2" id="gameItem2">
+						<img src="img/item3.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="3" id="gameItem3">
+						<img src="img/item4.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="4" id="gameItem4">
+						<img src="img/item5.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="5" id="gameItem5">
+						<img src="img/item6.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="6" id="gameItem6">
+						<img src="img/item7.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="7" id="gameItem7">
+						<img src="img/item8.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="8" id="gameItem8">
+						<img src="img/item9.png" />
+					</div>
+				</div>
+				<div class="item">
+					<div class="item-wrapper" rel="9" id="gameItem9">
+						<img src="img/item10.png" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="btn-wrapper">
+			<button class="down-btn">
+				<img src="img/arrow-down.png" />
+			</button>
+		</div>
+	</div>
+	<div class="endScreen" id="gameEndScreen">
+		<div class="end-wrapper">
+			<div class="msg-wrapper" id="gameMsgWrapper">
+			</div>
+			<div class="menu">
+				<button class="continue" id="gameContinue">CONTINUE VIDEO</button>
+				<button class="retry" id="gameRetry">TRY AGAIN</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+    game.continue = function() { // Callback function for ending game session
+      console.log('end game');
+    }
+    game.init();
+  }, false);
+</script>
+
+
+</body>
+</html>
+
+<!--</div>-->
+

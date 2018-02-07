@@ -1,0 +1,769 @@
+/* global window, document, $, require */
+/* eslint-disable global-require */
+import Mads, { fadeOutIn } from 'mads-custom';
+import { contain } from 'intrinsic-scale';
+import html2canvas from 'html2canvas';
+import autoInject from 'async/autoInject';
+import ZingTouch from 'zingtouch';
+import { trim } from './js/custom';
+import './css/game.css';
+import './main.css';
+
+class AdUnit extends Mads {
+  constructor() {
+    super();
+
+    this.allowContinue = false;
+    this.mobileAndTabletCheck = () => {
+      let check = false;
+      // eslint-disable-next-line
+      (function (a) {
+        // eslint-disable-next-line
+        if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+      })(navigator.userAgent || navigator.vendor || window.opera); // eslint-disable-line
+      return check;
+    };
+    this.isMobile = this.mobileAndTabletCheck();
+    this.orientation = 'portrait';
+    // this.loadCSS(this.resolve('css/game.css'));
+  }
+
+  render() {
+    window.addEventListener('message', (event) => {
+      if (window.parent) {
+        if (event.data.auth && event.data.auth.type) {
+          if (event.data.auth.type === 'landscape' && this.orientation !== 'landscape') {
+            window.parent.postMessage({
+              type: 'rotate-size',
+            }, '*');
+            this.orientation = 'landscape';
+            this.tracker('E', 'tilt_landscape');
+          } else if (event.data.auth.type === 'portrait' && this.orientation !== 'portrait') { // eslint-disable-line
+            window.parent.postMessage({
+              type: 'rotate-size',
+            }, '*');
+            this.orientation = 'portrait';
+          }
+        }
+      }
+    }, false);
+
+    return `
+      
+      <div id="portrait-page" class="portrait-show">
+          <img src="img/operation-feather-duster.svg" style="width:50%;" alt="">
+          <img src="img/more-ong-tilt.png" class="img-fluid" alt="">
+          <img src="img/tenaga-nasional-logo.svg" style="width:40%;" alt="">
+      </div>
+      <div id="start">
+        <div id="desktop-side">
+          <img src="img/the-coming-together.svg" id="desktop-logo" alt="">
+          <img src="img/tenaga-nasional-logo.svg" alt="">
+        </div>
+        <div id="video-page" class="video-show"><div class="video-container"><div id="video-frame"></div></div></div>
+        <div id="game-page" class="game-show">
+            <div id="game-initial">
+              <h1>FASSSSTTEERRRR!!!</h1>
+              <h2>Pick up 10 items before the rotan comes!</h2>
+              <h2 class="collect">Collect all 10 and there will be a <br><span style="color:yellow;">SPECIAL SURPRISE</span> for you at the very end!</h2>
+              <button class="start-now" id="btn-start-game">START NOW</button>
+            </div>
+        </div>
+        <div class="game" id="gameContainer" >
+            <div class="status">
+              <div class="found-wrapper">
+                <div class="found">
+                    <p class="title">Found</p>
+                  <div class="count" id="gameFoundCount">
+                    0/10
+                  </div>
+                </div>
+              </div>
+              <div class="timer-wrapper">
+                <div class="timer">
+                <div class="time-wrapper">
+                    <div class="time">
+                        <p class="title">Time Left</p>
+                      <div class="sec" id="gameTimer">
+                        1:00
+                      </div>
+                    </div>
+                  </div>
+                  <div class="space">
+                  </div>
+                  <div class="bar-wrapper">
+                          <div class="bar" id="gameTimeBar">
+                          </div>
+                  </div>
+                </div>
+              </div>
+              <div class="skip-wrapper">
+                <button class="skip" id="gameSkip">
+                  SKIP
+                </button>
+              </div>
+            </div>
+            <div class="pic">
+              <div class="img-wrapper" id="gameBgWrapper">
+                </div>
+            </div>
+            <div class="item-status">
+              <div class="btn-wrapper" style="position: relative;">
+                <button class="up-btn" style="position: absolute;bottom: 0px;">
+                    <img src="img/arrow-up.png" />
+                </button>
+              </div>
+              <div class="items-wrapper" id="gameItemListWrapper">
+                <div class="items" id="gameItemList">
+                  <div class="item">
+                    <div class="item-wrapper" rel="0" id="gameItem0">
+                      <img src="img/item1.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="1" id="gameItem1">
+                      <img src="img/item2.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="2" id="gameItem2">
+                       <img src="img/item3.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="3" id="gameItem3">
+                       <img src="img/item4.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="4" id="gameItem4">
+                       <img src="img/item5.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="5" id="gameItem5">
+                       <img src="img/item6.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="6" id="gameItem6">
+                       <img src="img/item7.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="7" id="gameItem7">
+                       <img src="img/item8.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="8" id="gameItem8">
+                       <img src="img/item9.png" />
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="item-wrapper" rel="9" id="gameItem9">
+                       <img src="img/item10.png" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-wrapper">
+                <button class="down-btn">
+                  <img src="img/arrow-down.png" />
+                </button>
+              </div>
+            </div>
+            <div class="endScreen" id="gameEndScreen">
+              <div class="end-wrapper">
+                    <div class="msg-wrapper" id="gameMsgWrapper">
+                    </div>
+                    <div class="menu">
+                        <button class="continue" id="gameContinue">CONTINUE VIDEO</button>
+                        <button class="retry" id="gameRetry">TRY AGAIN</button>
+                    </div>
+              </div>
+            </div>
+          </div>  
+      </div>
+      <div id="sharing-intro-page" style="display:none;" class="sharing-intro-show">
+          <div class="sharing-left">
+            <h1>IT ONLY TAKES A SPARK TO MAKE THE NEW YEAR BRIGHTER <small>Personalise your own spark in 3 steps out this Lunar New Year</small></h1>
+            <div class="sharing-icons">
+                <div class="camera">
+                    <img src="img/icon-camera.svg" alt="">
+                    <span>Upload Picture</span>
+                </div>
+                <div class="greeting">
+                    <img src="img/icon-greeting.svg" alt="">
+                    <span>Choose Greeting</span>
+                </div>
+                <div class="share">
+                    <img src="img/icon-share.svg" alt="">
+                    <span>Send Sparkly</span>
+                </div>
+            </div>
+            <button class="start-now" id="btn-start-sharing">START NOW</button>
+          </div>
+          <div class="sharing-right">
+            <img src="img/sharing-dragon.png" class="sharing-dragon" alt="">
+            <img src="img/tenaga-nasional-logo.svg" class="sharing-logo" alt="">
+          </div>
+      </div>
+      <div id="sharing-page" class="sharing-show" style="display:none;">
+        <div id="upload-page" class="upload-show">
+            <h1><small>STEP 1</small>PICK A PICTURE FOR SPARKY'S HEAD</h1>
+            <canvas id="upload-canvas"></canvas>
+            <img src="img/dragon-face.png" id="dragon-face" alt="">
+            <video id="upload-video" style="display:none;"></video>
+            <div class="sharing-actions">
+                <div id="uploading">
+                  <button class="start-now invert" id="btn-turn-on-camera">TURN ON CAMERA</button>
+                  <div class="wrapper-gallery-upload">
+                    <button class="start-now invert" id="btn-gallery-upload">UPLOAD PHOTO</button>
+                    <input type="file" id="input-gallery-file" name="gallery-file" />
+                  </div>
+                  <!--<button class="start-now invert" id="btn-gallery-upload">GALLERY UPLOAD</button>-->
+                </div>
+                <button class="start-now invert" id="btn-upload-next" style="display:none;">CONTINUE</button>
+            </div>
+        </div>
+        <div id="greeting-page" style="display:none;" class="greeting-show">
+            <div style="height:100%;">
+              <h1><small>STEP 2</small>MAKE A WISH FOR YOUR FRIEND</h1>
+              <div id="slider">
+                  <div><img src="img/sc05-text-white-01.svg" alt=""></div>
+                  <div><img src="img/sc05-text-white-02.svg" alt=""></div>
+                  <div><img src="img/sc05-text-white-03.svg" alt=""></div>
+                  <div><img src="img/sc05-text-white-04.svg" alt=""></div>
+                  <div><img src="img/sc05-text-white-05.svg" alt=""></div>
+                  <div><img src="img/sc05-text-white-06.svg" alt=""></div>
+              </div>
+              <div class="greeting-actions">
+                <span class="greeting-translation" id="greeting-translation">Happy Chinese New Year</span>
+                <button class="start-now invert" id="btn-greeting-next">CONTINUE</button>
+              </div>
+            </div>
+        </div>
+        <div id="share-page" style="display:none;" class="share-show">
+            <h1><small>STEP 3</small>SPARKY'S READY TO GO!</h1>
+            <div class="share-intent">
+              <div class="share-left">
+                  <span>Send him out and watch him dance in the Lunar New Year!</span>
+                  <div class="sharing-icons-2" id="sharing-icons-2">
+                     <img id="share-fb" src="img/share-fb.png" alt="">
+                     <img id="share-twitter" src="img/share-twitter.png" alt="">
+                     <a href="data:image/jpeg;base64,/9j/4AAQSkZ..." id="share-download" download="tnb_share.gif"><img src="img/share-download.png" alt=""></a>
+                  </div>
+                  <button class="start-now invert" id="btn-edit-greeting">EDIT GREETING</button>
+              </div>
+              <div id="share-right" class="share-right">
+              </div>
+            </div>
+        </div>
+      </div>
+      <div id="end-page" style="display:none;">
+        <div class="left-end">
+            <img src="img/the-coming-together.svg" alt="">
+            <img src="img/tenaga-nasional-logo.svg" alt="">
+        </div>
+        <div class="right-end">
+            <button id="btn-play-again" class="start-now invert">PLAY GAME AGAIN</button>
+            <button id="btn-greeting-again" class="start-now invert">SEND ANOTHER GREETING</button>
+        </div>
+      </div>
+      <div id="workspace"></div>
+      <div id="loading-page" style="color:white;display:none;">
+        <h1 id="loading-text">Loading...</h1>
+      </div>
+    `;
+  }
+
+  postRender() {
+    if (!this.isMobile) {
+      this.elems['video-page'].style.width = '80%';
+      this.elems['video-page'].style.height = '80%';
+      this.elems['desktop-logo'].style.width = '100%';
+    }
+
+    this.videoPage = document.getElementById('video-page');
+    this.gamePage = document.getElementById('game-page');
+    this.sharingIntroPage = document.getElementById('sharing-intro-page');
+    this.ctx = this.elems['upload-canvas'].getContext('2d');
+
+    this.cWidth = this.elems['upload-canvas'].offsetWidth;
+    this.cHeight = this.elems['upload-canvas'].offsetHeight;
+    this.elems['upload-canvas'].width = this.cWidth;
+    this.elems['upload-canvas'].height = this.cHeight;
+
+    this.elems['dragon-face'].onload = () => {
+      const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
+      this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+    };
+
+    this.loadJS(this.resolve('js/ytcomponent.js')).then(() => {
+      console.log(typeof window.ytComponent !== 'undefined' ? 'ytComponent loaded' : 'ytComponent not loaded');
+      this.video = new window.ytComponent({ // eslint-disable-line
+        container: 'video-frame',
+        videoId: 'IGQBtbKSVhY',
+        playerVars: {
+          controls: 0,
+          playsinline: 1,
+          showinfo: 0,
+          rel: 0,
+          enablejsapi: 1,
+          modestbranding: 1,
+        },
+        tracker: (...args) => {
+          console.log('tracker', args);
+          this.tracker(...args);
+        },
+        progress: (time, { player }) => {
+          if (time > 2 && !this.allowContinue) {
+            player.pauseVideo();
+            this.videoPage.style.zIndex = 0;
+            this.gamePage.style.zIndex = 1;
+            this.gamePage.style.visibility = 'visible';
+          }
+        },
+        playing: () => {
+          this.elems['video-page'].style.width = '100%';
+          this.elems['video-page'].style.height = '100%';
+        },
+        onReady: () => {
+          this.onResize();
+          window.addEventListener('resize', this.onResize.bind(this));
+        },
+        onFinish: () => {
+          fadeOutIn(this.elems.start, this.sharingIntroPage, { display: 'flex' });
+        },
+      });
+
+      window.onYouTubeIframeAPIReady = () => {
+        this.video.loadVideo();
+      };
+    });
+  }
+
+  onResize() {
+    if (this.elems['video-page'].childNodes && this.elems['video-page'].childNodes[0] && this.elems['video-page'].childNodes[0].style) {
+      this.elems['video-page'].childNodes[0].style.paddingBottom = `${((this.elems['video-page'].clientHeight / this.elems['video-page'].clientWidth) * 100)}%`;
+    }
+  }
+
+  style() {
+    console.log('elements', this.elems);
+
+    const links = [];
+
+    return [...links, `
+      body, .portrait-show, #loading-page, #end-page {
+        background: url(${this.resolve('img/bg1.png')});
+      }       
+      .game-show:before {
+        content: ' ';
+        background: url(${this.resolve('img/bg1.png')});
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        z-index: -1;
+        opacity: 0.95;
+       }
+       #slider .slick-slide.slick-center:before {
+        background-image: url(${this.resolve('img/sc06-textplace.png')})
+       }
+      @media screen and (orientation:landscape) {
+        .portrait-show {
+          display: none!important;
+        }
+        #workspace {
+          display: block;
+        }
+      }
+      @media screen and (orientation:portrait) {
+        #workspace {
+          display: none;
+        }
+        .video-show {
+          display: none!important;
+        }
+      }
+    `];
+  }
+
+  events() {
+    this.elems['btn-start-game'].addEventListener('mousedown', () => {
+      this.tracker('E', 'start_game');
+      this.elems.gameContainer.style.zIndex = 200;
+      this.loadJS(this.resolve('js/game.js')).then(() => {
+        console.log(typeof window.game !== 'undefined' ? 'game loaded' : 'game not loaded');
+        window.game.init();
+        window.game.continue = () => {
+          this.videoPage.style.zIndex = 1;
+          this.gamePage.style.zIndex = 0;
+          this.allowContinue = true;
+          this.video.player.playVideo();
+          this.elems.gameContainer.style.zIndex = -100;
+        };
+      });
+    });
+
+    this.elems['btn-start-sharing'].addEventListener('mousedown', () => {
+      this.tracker('E', 'start_sharing');
+      fadeOutIn(this.sharingIntroPage, this.elems['sharing-page'], { display: 'block' });
+      setTimeout(() => {
+        this.cWidth = this.elems['upload-canvas'].offsetWidth;
+        this.cHeight = this.elems['upload-canvas'].offsetHeight;
+        this.elems['upload-canvas'].width = this.cWidth;
+        this.elems['upload-canvas'].height = this.cHeight;
+        this.ctx.translate(this.cWidth, 0);
+        this.ctx.scale(-1, 1);
+        const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
+        this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+      }, 1000);
+    });
+
+    this.elems['btn-turn-on-camera'].addEventListener('mousedown', () => {
+      if (window.navigator.mediaDevices) {
+        window.navigator.mediaDevices.getUserMedia({
+          video: {
+            width: this.elems['upload-canvas'].offsetWidth,
+            height: this.elems['upload-canvas'].offsetHeight,
+          },
+        }).then((stream) => {
+          this.elems['upload-video'].src = window.URL.createObjectURL(stream);
+          this.elems['upload-video'].play();
+          this.withCamera = true;
+          this.stopVideo = () => {
+            stream.getTracks()[0].stop();
+          };
+        }).catch((err) => {
+          console.error(err);
+        });
+      }
+    });
+
+    this.uploadNext = () => {
+      this.elems['loading-page'].style.display = 'flex';
+      setTimeout(() => {
+        fadeOutIn(this.elems['upload-page'], this.elems['greeting-page'], { display: 'block' });
+        if (this.withCamera) {
+          this.elems['upload-video'].pause();
+          if (this.stopVideo) this.stopVideo();
+          this.camerashot = this.elems['upload-canvas'].toDataURL('image/png');
+        }
+
+        this.loadJS(this.resolve('js/jquery.min.js')).then(() => {
+          this.loadJS(this.resolve('js/slick.min.js')).then(() => {
+            $('#slider').slick({ // eslint-disable-line
+              centerMode: true,
+              centerPadding: '60px',
+              slidesToShow: 5,
+              adaptiveHeight: true,
+              responsive: [
+                {
+                  breakpoint: 768,
+                  settings: {
+                    // arrows: false,
+                    centerMode: true,
+                    centerPadding: '40px',
+                    slidesToShow: 5,
+                  },
+                },
+                {
+                  breakpoint: 480,
+                  settings: {
+                    // arrows: false,
+                    centerMode: true,
+                    centerPadding: '40px',
+                    slidesToShow: 5,
+                  },
+                },
+              ],
+            });
+
+            this.elems['loading-page'].style.display = 'none';
+            $('#slider')
+            // .on('init', () => {
+            //   applyStyleToSiblings();
+            // })
+              .on('beforeChange', (event, slick, currentSlide, nextSlide) => {
+                let translation = 'Happy Chinese New Year';
+                switch (nextSlide) {
+                  case 0:
+                    translation = 'Happy Chinese New Year';
+                    break;
+                  case 1:
+                    translation = 'Wishing You Steady Advancement In Career';
+                    break;
+                  case 2:
+                    translation = 'Wishing You Everlasting Success';
+                    break;
+                  case 3:
+                    translation = 'Wishing You A Thriving And Prosperous Business';
+                    break;
+                  case 4:
+                    translation = 'Wishing You Great Luck In Everything You Do';
+                    break;
+                  case 5:
+                    translation = 'Blessed New Year';
+                    break;
+                  default:
+                    translation = 'Happy Chinese New Year';
+                }
+                this.elems['greeting-translation'].innerText = translation;
+              });
+          });
+        });
+      }, 1000);
+    };
+
+    this.elems['btn-greeting-next'].addEventListener('mousedown', () => {
+      this.tracker('E', 'finish_greeting');
+      this.elems['loading-page'].style.display = 'flex';
+      autoInject({
+        gif3: (callback) => {
+          try {
+            html2canvas($('#slider').find('.slick-current')[0], {
+              backgroundColor: null,
+            }).then((canvas) => {
+              this.elems.workspace.style.backgroundImage = `url(${this.resolve('img/bg-3-gif.png')})`;
+              const dragon3 = new window.Image();
+              dragon3.className = 'dragon3';
+              dragon3.onload = () => {
+                this.elems.workspace.appendChild(dragon3);
+                const greetingImg = new window.Image();
+                greetingImg.className = 'greetingImg';
+                greetingImg.onload = () => {
+                  this.elems.workspace.appendChild(greetingImg);
+                  html2canvas(this.elems.workspace).then((c) => {
+                    callback(null, { result: trim(c).toDataURL('image/png') });
+                  });
+                };
+                greetingImg.src = trim(canvas).toDataURL('image/png');
+              };
+              dragon3.src = this.resolve('img/dragon-3-gif.png');
+            });
+          } catch (err) {
+            callback(err);
+          }
+        },
+        gif2: ['gif3', (gif3, callback) => {
+          if (!gif3) {
+            callback('failed generating gif3');
+            return;
+          }
+          try {
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            const bg2 = new window.Image();
+            // bg2.style.opacity = '0.5';
+            bg2.className = 'bg';
+            bg2.onload = () => {
+              const camerashot = new window.Image();
+              camerashot.id = 'camerashot';
+              camerashot.onload = () => {
+                this.elems.workspace.appendChild(bg2);
+                this.elems.workspace.appendChild(camerashot);
+                html2canvas(this.elems.workspace).then((c) => {
+                  callback(null, { result: trim(c).toDataURL('image/png'), camerashot });
+                });
+              };
+              camerashot.src = this.camerashot;
+            };
+            bg2.src = this.resolve('img/bg-2-gif.png');
+          } catch (err) {
+            callback(err);
+          }
+        }],
+        gif1: ['gif3', 'gif2', (gif3, gif2, callback) => {
+          if (!gif3 && !gif2) {
+            callback('failed generating gif3 and gif2');
+            return;
+          }
+
+          try {
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            const bg1 = new window.Image();
+            const camerashot = gif2.camerashot;
+            camerashot.id = 'camerashot2';
+            bg1.className = 'bg';
+            bg1.onload = () => {
+              this.elems.workspace.appendChild(bg1);
+              this.elems.workspace.appendChild(camerashot);
+              html2canvas(this.elems.workspace).then((c) => {
+                callback(null, { result: trim(c).toDataURL('image/png') });
+              });
+            };
+            bg1.src = this.resolve('img/bg-1-gif.png');
+          } catch (err) {
+            callback(err);
+          }
+        }],
+      }, (err, { gif3, gif2, gif1 }) => {
+        console.log(err);
+
+        this.loadJS(this.resolve('js/gif.js')).then(() => {
+          const gif = new GIF({ // eslint-disable-line
+            workers: 2,
+            quality: 10,
+            workerScript: this.resolve('js/gif.worker.js'),
+          });
+          [gif3, gif2, gif1].forEach((img, index) => {
+            const i = new window.Image();
+            i.onload = () => {
+              gif.addFrame(i);
+              console.log(index);
+              if (index === 2) {
+                gif.render();
+              }
+            };
+            i.src = img.result;
+          });
+          gif.on('finished', (blob) => {
+            $('#slider').slick('unslick');
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            this.elems.workspace.style.display = 'none';
+            this.elems['greeting-page'].style.display = 'none';
+            this.elems['share-page'].style.display = 'block';
+            this.elems['share-page'].style.opacity = '1';
+            this.elems['loading-page'].style.display = 'none';
+            this.finishGif = window.URL.createObjectURL(blob);
+            this.elems['share-right'].innerHTML = `<img src="${this.finishGif}">`;
+            this.elems['share-download'].setAttribute('href', this.finishGif);
+          });
+        });
+      });
+    });
+
+    this.elems['upload-video'].addEventListener('play', () => {
+      const _this = this; // eslint-disable-line
+      this.elems.uploading.style.display = 'none';
+      this.elems['btn-upload-next'].style.display = 'block';
+      this.elems['btn-upload-next'].addEventListener('mousedown', this.uploadNext);
+
+      (function loop() { // eslint-disable-line
+        if (!_this.elems['upload-video'].paused && !_this.elems['upload-video'].ended) {
+          const v = contain(_this.cWidth, _this.cHeight, _this.elems['dragon-face'].width, _this.elems['dragon-face'].height);
+          _this.ctx.drawImage(_this.elems['upload-video'], v.x, v.y, v.width, v.height);
+          const c = contain(_this.cWidth, _this.cHeight, _this.elems['dragon-face'].width, _this.elems['dragon-face'].height);
+          _this.ctx.drawImage(_this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+        }
+
+        if (_this.elems['upload-video'].paused || _this.elems['upload-video'].ended) {
+          // const v = contain(_this.cWidth,
+          // _this.cHeight, _this.elems['dragon-face'].width, _this.elems['dragon-face'].height);
+          _this.ctx.drawImage(_this.elems['upload-video'], 0, 0, _this.cWidth, _this.cHeight); // , v.x, v.y, v.width, v.height);
+          _this.camerashot = _this.elems['upload-canvas'].toDataURL('image/png');
+        }
+
+        setTimeout(loop, 1000 / 30);
+      })();
+    });
+
+    const greetAgain = () => {
+      this.tracker('E', 'edit_greeting');
+      this.elems.workspace.style.display = 'block';
+      fadeOutIn(this.elems['share-page'], this.elems['upload-page'], { display: 'flex' });
+      const input = this.elems['input-gallery-file'];
+      input.value = '';
+      if (input.reset) input.reset();
+      this.elems.uploading.style.display = 'flex';
+      this.elems['btn-upload-next'].style.display = 'none';
+      setTimeout(() => {
+        this.cWidth = this.elems['upload-canvas'].offsetWidth;
+        this.cHeight = this.elems['upload-canvas'].offsetHeight;
+        this.elems['upload-canvas'].width = this.cWidth;
+        this.elems['upload-canvas'].height = this.cHeight;
+        this.ctx.translate(this.cWidth, 0);
+        this.ctx.scale(-1, 1);
+        const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
+        this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+      }, 1000);
+    };
+
+    this.elems['btn-edit-greeting'].addEventListener('mousedown', greetAgain);
+
+    this.elems['btn-play-again'].addEventListener('mousedown', () => {
+      this.tracker('E', 'play_again');
+      this.elems.gameContainer.style.zIndex = 200;
+      this.elems['end-page'].style.display = 'none';
+      this.elems.start.style.display = 'block';
+      this.elems.start.style.opacity = 1;
+      // this.loadJS(this.resolve('js/game.js')).then(() => {
+      //   console.log(typeof window.game !== 'undefined' ? 'game loaded' : 'game not loaded');
+      window.game.continue = () => {
+        this.videoPage.style.zIndex = 1;
+        this.gamePage.style.zIndex = 0;
+        this.allowContinue = true;
+        this.video.player.playVideo();
+        this.elems.gameContainer.style.zIndex = -100;
+      };
+      window.game.retry();
+      // });
+    });
+
+    this.elems['sharing-icons-2'].addEventListener('mousedown', () => {
+      this.tracker('E', 'shared');
+      this.elems['share-page'].style.display = 'none';
+      this.elems['end-page'].style.display = 'flex';
+    });
+
+    this.elems['btn-greeting-again'].addEventListener('mousedown', greetAgain);
+
+    this.elems['input-gallery-file'].addEventListener('change', () => {
+      this.tracker('E', 'upload_photo');
+      this.elems.uploading.style.display = 'none';
+      this.elems['btn-upload-next'].style.display = 'block';
+      const input = this.elems['input-gallery-file'];
+      if (input.files && input.files[0]) {
+        const reader = new window.FileReader();
+        reader.onload = (e) => {
+          const image = new window.Image();
+          image.onload = () => {
+            const v = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
+            this.ctx.drawImage(image, v.x, v.y, v.width, v.height);
+            const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
+            this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+
+            console.log('should write new face');
+
+            this.activeRegion = ZingTouch.Region(this.elems['upload-page']);
+
+            this.activeRegion.bind(this.elems['upload-canvas'], 'pan', (x) => {
+              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+              this.dragX = -(x.detail.events[0].x - (this.cWidth + v.x));
+              this.dragY = x.detail.events[0].y - this.cHeight;
+              this.ctx.drawImage(image, this.dragX,
+                this.dragY, v.width, v.height);
+              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+            });
+
+            this.elems['btn-upload-next'].addEventListener('click', () => {
+              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+              this.ctx.drawImage(image, this.dragX,
+                this.dragY, v.width, v.height);
+              this.camerashot = this.elems['upload-canvas'].toDataURL('image/png');
+              this.uploadNext();
+            });
+
+            // this.activeRegion.bind(this.elems['btn-upload-next'], 'tap', () => {
+            //   this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+            //   this.ctx.drawImage(image, this.dragX,
+            //     this.dragY, v.width, v.height);
+            //   this.camerashot = this.elems['upload-canvas'].toDataURL('image/png');
+            //   this.uploadNext();
+            // }, false);
+          };
+          image.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    });
+  }
+}
+
+window.ad = new AdUnit();
