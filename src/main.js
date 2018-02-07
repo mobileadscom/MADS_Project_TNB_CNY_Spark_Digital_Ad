@@ -3,7 +3,7 @@
 import Mads, { fadeOutIn } from 'mads-custom';
 import { contain } from 'intrinsic-scale';
 import html2canvas from 'html2canvas';
-import autoInject from 'async/autoInject';
+import series from 'async/series';
 import ZingTouch from 'zingtouch';
 import { trim } from './js/custom';
 import './css/game.css';
@@ -307,11 +307,13 @@ class AdUnit extends Mads {
       this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
     };
 
+    let nonce = false;
+
     this.loadJS(this.resolve('js/ytcomponent.js')).then(() => {
       console.log(typeof window.ytComponent !== 'undefined' ? 'ytComponent loaded' : 'ytComponent not loaded');
       this.video = new window.ytComponent({ // eslint-disable-line
         container: 'video-frame',
-        videoId: 'IGQBtbKSVhY',
+        videoId: 'IGQBtbKSVhY', // 'jpqT1dNOAp8',
         playerVars: {
           controls: 0,
           playsinline: 1,
@@ -325,7 +327,7 @@ class AdUnit extends Mads {
           this.tracker(...args);
         },
         progress: (time, { player }) => {
-          if (time > 2 && !this.allowContinue) {
+          if (time > 35 && !this.allowContinue) {
             player.pauseVideo();
             this.videoPage.style.zIndex = 0;
             this.gamePage.style.zIndex = 1;
@@ -341,7 +343,10 @@ class AdUnit extends Mads {
           window.addEventListener('resize', this.onResize.bind(this));
         },
         onFinish: () => {
-          fadeOutIn(this.elems.start, this.sharingIntroPage, { display: 'flex' });
+          if (!nonce) {
+            fadeOutIn(this.elems.start, this.sharingIntroPage, { display: 'flex' });
+            nonce = true;
+          }
         },
       });
 
@@ -419,6 +424,8 @@ class AdUnit extends Mads {
 
     this.elems['btn-start-sharing'].addEventListener('mousedown', () => {
       this.tracker('E', 'start_sharing');
+      this.elems['upload-page'].style.display = 'flex';
+      this.elems['upload-page'].style.opacity = '1';
       fadeOutIn(this.sharingIntroPage, this.elems['sharing-page'], { display: 'block' });
       setTimeout(() => {
         this.cWidth = this.elems['upload-canvas'].offsetWidth;
@@ -469,8 +476,7 @@ class AdUnit extends Mads {
               centerPadding: '0px',
               slidesToShow: 5,
               adaptiveHeight: true,
-              responsive: [
-              ],
+              responsive: [],
             });
 
             this.elems['loading-page'].style.display = 'none';
@@ -555,17 +561,17 @@ class AdUnit extends Mads {
     this.elems['btn-greeting-next'].addEventListener('mousedown', () => {
       this.tracker('E', 'finish_greeting');
       this.elems['loading-page'].style.display = 'flex';
-      autoInject({
-        gif3: (callback) => {
+      series({
+        gif8: (callback) => {
           try {
             html2canvas($('#slider').find('.slick-current')[0], {
               backgroundColor: null,
             }).then((canvas) => {
-              this.elems.workspace.style.backgroundImage = `url(${this.resolve('img/bg-3-gif.png')})`;
-              const dragon3 = new window.Image();
-              dragon3.className = 'dragon3';
-              dragon3.onload = () => {
-                this.elems.workspace.appendChild(dragon3);
+              this.elems.workspace.style.backgroundImage = `url(${this.resolve('img/asset-8---background.png')})`;
+              const dragon8 = new window.Image();
+              dragon8.className = 'dragon8';
+              dragon8.onload = () => {
+                this.elems.workspace.appendChild(dragon8);
                 const greetingImg = new window.Image();
                 greetingImg.className = 'greetingImg';
                 greetingImg.onload = () => {
@@ -576,81 +582,154 @@ class AdUnit extends Mads {
                 };
                 greetingImg.src = trim(canvas).toDataURL('image/png');
               };
-              dragon3.src = this.resolve('img/dragon-3-gif.png');
+              dragon8.src = this.resolve('img/asset-8---lion.png');
             });
           } catch (err) {
             callback(err);
           }
         },
-        gif2: ['gif3', (gif3, callback) => {
-          if (!gif3) {
-            callback('failed generating gif3');
-            return;
+        gif7: (callback) => {
+          callback(null, { result: this.resolve('img/asset-7---background.png') });
+        },
+        gif6: (callback) => {
+          try {
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            const bg6 = new window.Image();
+            bg6.className = 'bg6';
+            bg6.onload = () => {
+              this.camerashotEl = new window.Image();
+              this.camerashotEl.id = 'camerashot6';
+              this.camerashotEl.onload = () => {
+                this.elems.workspace.appendChild(bg6);
+                this.elems.workspace.appendChild(this.camerashotEl);
+                html2canvas(this.elems.workspace).then((c) => {
+                  callback(null, { result: trim(c).toDataURL('image/png') });
+                });
+              };
+              this.camerashotEl.src = this.camerashot;
+            };
+            bg6.src = this.resolve('img/Asset-6.png');
+          } catch (err) {
+            callback(err);
           }
+        },
+        gif5: (callback) => {
+          try {
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            const bg5 = new window.Image();
+            bg5.className = 'bg5';
+            bg5.onload = () => {
+              this.camerashotEl.id = 'camerashot5';
+              this.elems.workspace.appendChild(bg5);
+              this.elems.workspace.appendChild(this.camerashotEl);
+              html2canvas(this.elems.workspace).then((c) => {
+                callback(null, { result: trim(c).toDataURL('image/png') });
+              });
+            };
+            bg5.src = this.resolve('img/Asset-5.png');
+          } catch (err) {
+            callback(err);
+          }
+        },
+        gif4: (callback) => {
+          try {
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            const bg4 = new window.Image();
+            // bg4.style.opacity = '0.5';
+            bg4.className = 'bg4';
+            bg4.onload = () => {
+              this.camerashotEl.id = 'camerashot4';
+              this.elems.workspace.appendChild(bg4);
+              this.elems.workspace.appendChild(this.camerashotEl);
+              html2canvas(this.elems.workspace).then((c) => {
+                callback(null, { result: trim(c).toDataURL('image/png') });
+              });
+            };
+            bg4.src = this.resolve('img/Asset-4.png');
+          } catch (err) {
+            callback(err);
+          }
+        },
+        gif3: (callback) => {
+          try {
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            const bg3 = new window.Image();
+            // bg3.style.opacity = '0.5';
+            bg3.className = 'bg3';
+            bg3.onload = () => {
+              this.camerashotEl.id = 'camerashot3';
+              this.elems.workspace.appendChild(bg3);
+              this.elems.workspace.appendChild(this.camerashotEl);
+              html2canvas(this.elems.workspace).then((c) => {
+                // console.log(c);
+                callback(null, { result: trim(c).toDataURL('image/png') });
+              });
+            };
+            bg3.src = this.resolve('img/Asset-3.png');
+          } catch (err) {
+            callback(err);
+          }
+        },
+        gif2: (callback) => {
           try {
             this.elems.workspace.style.backgroundImage = 'none';
             this.elems.workspace.innerHTML = '';
             const bg2 = new window.Image();
             // bg2.style.opacity = '0.5';
-            bg2.className = 'bg';
+            bg2.className = 'bg2';
             bg2.onload = () => {
-              const camerashot = new window.Image();
-              camerashot.id = 'camerashot';
-              camerashot.onload = () => {
-                this.elems.workspace.appendChild(bg2);
-                this.elems.workspace.appendChild(camerashot);
-                html2canvas(this.elems.workspace).then((c) => {
-                  callback(null, { result: trim(c).toDataURL('image/png'), camerashot });
-                });
-              };
-              camerashot.src = this.camerashot;
-            };
-            bg2.src = this.resolve('img/bg-2-gif.png');
-          } catch (err) {
-            callback(err);
-          }
-        }],
-        gif1: ['gif3', 'gif2', (gif3, gif2, callback) => {
-          if (!gif3 && !gif2) {
-            callback('failed generating gif3 and gif2');
-            return;
-          }
-
-          try {
-            this.elems.workspace.style.backgroundImage = 'none';
-            this.elems.workspace.innerHTML = '';
-            const bg1 = new window.Image();
-            const camerashot = gif2.camerashot;
-            camerashot.id = 'camerashot2';
-            bg1.className = 'bg';
-            bg1.onload = () => {
-              this.elems.workspace.appendChild(bg1);
-              this.elems.workspace.appendChild(camerashot);
+              this.camerashotEl.id = 'camerashot2';
+              this.elems.workspace.appendChild(bg2);
+              this.elems.workspace.appendChild(this.camerashotEl);
               html2canvas(this.elems.workspace).then((c) => {
                 callback(null, { result: trim(c).toDataURL('image/png') });
               });
             };
-            bg1.src = this.resolve('img/bg-1-gif.png');
+            bg2.src = this.resolve('img/Asset-2.png');
           } catch (err) {
             callback(err);
           }
-        }],
-      }, (err, { gif3, gif2, gif1 }) => {
+        },
+        gif1: (callback) => {
+          try {
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            const bg1 = new window.Image();
+            // bg1.style.opacity = '0.5';
+            bg1.className = 'bg1';
+            bg1.onload = () => {
+              this.camerashotEl.id = 'camerashot1';
+              this.elems.workspace.appendChild(bg1);
+              this.elems.workspace.appendChild(this.camerashotEl);
+              html2canvas(this.elems.workspace).then((c) => {
+                // console.log(c);
+                callback(null, { result: trim(c).toDataURL('image/png') });
+              });
+            };
+            bg1.src = this.resolve('img/Asset-1.png');
+          } catch (err) {
+            callback(err);
+          }
+        },
+      }, (err, { gif8, gif7, gif6, gif5, gif4, gif3, gif2, gif1 }) => {
         console.log(err);
 
         this.loadJS(this.resolve('js/gif.js')).then(() => {
           const gif = new GIF({ // eslint-disable-line
-            workers: 2,
+            workers: 8,
             quality: 10,
             workerScript: this.resolve('js/gif.worker.js'),
-            width: 400,
           });
-          [gif3, gif2, gif1].forEach((img, index) => {
+          [gif8, gif7, gif6, gif5, gif4, gif3, gif2, gif1].forEach((img, index) => {
             const i = new window.Image();
             i.onload = () => {
               gif.addFrame(i);
               console.log(index);
-              if (index === 2) {
+              if (index === 7) {
                 gif.render();
               }
             };
@@ -658,6 +737,9 @@ class AdUnit extends Mads {
           });
           gif.on('finished', (blob) => {
             $('#slider').slick('unslick');
+            this.elems.workspace.style.backgroundImage = 'none';
+            this.elems.workspace.innerHTML = '';
+            this.elems.workspace.style.display = 'none';
             this.finishGifBlob = blob;
             this.finishGif = window.URL.createObjectURL(blob);
             this.finishGifEl = new window.Image();
@@ -668,9 +750,6 @@ class AdUnit extends Mads {
               };
               this.elems['share-right'].innerHTML = '';
               this.elems['share-right'].appendChild(this.finishGifEl);
-              this.elems.workspace.style.backgroundImage = 'none';
-              this.elems.workspace.innerHTML = '';
-              this.elems.workspace.style.display = 'none';
               this.elems['greeting-page'].style.display = 'none';
               this.elems['share-page'].style.display = 'block';
               this.elems['share-page'].style.opacity = '1';
@@ -739,15 +818,26 @@ class AdUnit extends Mads {
       this.elems.start.style.opacity = 1;
       // this.loadJS(this.resolve('js/game.js')).then(() => {
       //   console.log(typeof window.game !== 'undefined' ? 'game loaded' : 'game not loaded');
+      this.elems.gameContinue.innerText = 'Continue';
       window.game.continue = () => {
-        this.videoPage.style.zIndex = 1;
-        this.gamePage.style.zIndex = 0;
-        this.allowContinue = true;
-        this.video.player.playVideo();
-        this.elems.gameContainer.style.zIndex = -100;
+        // this.videoPage.style.zIndex = 1;
+        // this.gamePage.style.zIndex = 0;
+        // this.allowContinue = true;
+        // this.video.player.playVideo();
+        this.elems.start.style.display = 'none';
+        this.elems['end-page'].style.display = 'flex';
+        // this.elems.gameContainer.style.zIndex = -100;
       };
       window.game.retry();
       // });
+    });
+
+    this.elems['btn-greeting-again'].addEventListener('mousedown', () => {
+      this.elems['end-page'].style.display = 'none';
+      this.elems['sharing-page'].style.display = 'flex';
+      this.elems['upload-page'].style.display = 'none';
+      this.elems['share-page'].style.display = 'block';
+      this.elems['sharing-intro-page'].style.display = 'none';
     });
 
     const uploadEverything = (blob, social) => new Promise((resolve) => {
@@ -782,7 +872,7 @@ class AdUnit extends Mads {
               
                   <meta name="DC.title" content="${this.title}">
               
-                  <meta name="twitter:card" content="summary_large_image">
+                  <meta name="twitter:card" content="player">
                   <meta name="twitter:url" content="${htmlGIFUri}">
                   <meta name="twitter:site" content="@Tenaga_Nasional">
                   <meta name="twitter:title" content="${this.title}">
@@ -793,7 +883,7 @@ class AdUnit extends Mads {
                   <title>${this.title}</title>
               </head>
               <body style="margin:0;padding:0;">
-              <img src="${htmlGIFUri}" alt="">
+                <img src="${htmlGIFUri}" style="width:100%;" alt="">
               </body>
               </html>`;
 
@@ -846,8 +936,6 @@ class AdUnit extends Mads {
       this.elems['share-page'].style.display = 'none';
       this.elems['end-page'].style.display = 'flex';
     });
-
-    this.elems['btn-greeting-again'].addEventListener('mousedown', greetAgain);
 
     this.elems['input-gallery-file'].addEventListener('change', () => {
       this.tracker('E', 'upload_photo');
