@@ -427,6 +427,14 @@ class AdUnit extends Mads {
       this.elems['upload-page'].style.display = 'flex';
       this.elems['upload-page'].style.opacity = '1';
       fadeOutIn(this.sharingIntroPage, this.elems['sharing-page'], { display: 'block' });
+      this.elems['upload-page'].style.display = 'flex';
+      this.elems['upload-page'].style.opacity = 1;
+      this.elems.uploading.style.display = 'flex';
+      this.elems['btn-upload-next'].style.display = 'none';
+      const input = this.elems['input-gallery-file'];
+      input.value = '';
+      if (input.reset) input.reset();
+
       setTimeout(() => {
         this.cWidth = this.elems['upload-canvas'].offsetWidth;
         this.cHeight = this.elems['upload-canvas'].offsetHeight;
@@ -789,6 +797,7 @@ class AdUnit extends Mads {
 
     const greetAgain = () => {
       this.tracker('E', 'edit_greeting');
+      this.elems['end-page'].style.display = 'none';
       this.elems.workspace.style.display = 'block';
       fadeOutIn(this.elems['share-page'], this.elems['upload-page'], { display: 'flex' });
       const input = this.elems['input-gallery-file'];
