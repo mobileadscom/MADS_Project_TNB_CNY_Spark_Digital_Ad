@@ -420,6 +420,11 @@ class AdUnit extends Mads {
     this.elems['btn-start-sharing'].addEventListener('mousedown', () => {
       this.tracker('E', 'start_sharing');
       fadeOutIn(this.sharingIntroPage, this.elems['sharing-page'], { display: 'block' });
+      this.elems['upload-page'].style.display = 'flex';
+      this.elems['upload-page'].style.opacity = 1;
+      this.elems.uploading.style.display = 'flex';
+      this.elems['btn-upload-next'].style.display = 'none';
+
       setTimeout(() => {
         this.cWidth = this.elems['upload-canvas'].offsetWidth;
         this.cHeight = this.elems['upload-canvas'].offsetHeight;
