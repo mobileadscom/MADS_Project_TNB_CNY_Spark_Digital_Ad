@@ -424,6 +424,9 @@ class AdUnit extends Mads {
       this.elems['upload-page'].style.opacity = 1;
       this.elems.uploading.style.display = 'flex';
       this.elems['btn-upload-next'].style.display = 'none';
+      const input = this.elems['input-gallery-file'];
+      input.value = '';
+      if (input.reset) input.reset();
 
       setTimeout(() => {
         this.cWidth = this.elems['upload-canvas'].offsetWidth;
