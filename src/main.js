@@ -710,6 +710,7 @@ class AdUnit extends Mads {
 
     const greetAgain = () => {
       this.tracker('E', 'edit_greeting');
+      this.elems['end-page'].style.display = 'none';
       this.elems.workspace.style.display = 'block';
       fadeOutIn(this.elems['share-page'], this.elems['upload-page'], { display: 'flex' });
       const input = this.elems['input-gallery-file'];
