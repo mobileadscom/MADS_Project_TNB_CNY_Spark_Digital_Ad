@@ -466,7 +466,7 @@ h1, h2 {
 #slider .slick-slide.slick-center:before {
     content: ' ';
     height: 100%;
-    width: 100%;
+    width: 140%;
     position: absolute;
     background-size: contain;
     background-repeat: no-repeat;
@@ -542,5 +542,39 @@ h1, h2 {
     }
     .game-show h1 {
         font-size: 48px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-show h1 {
+        font-size: 32px;
+    }
+    .game-show h2 {
+        font-size: 1rem;
+    }
+    .start-now {
+        padding: 15px 5rem;
+    }
+    .game .endScreen .menu button {
+        padding: 13px 0px;
+    }
+    .sharing-intro-show .start-now {
+        font-size: 15px;
+        padding: 19px 48px;
+        padding: 12px 3rem;
+    }
+    .upload-show .sharing-actions button {
+        padding: 12px 2rem;
+        font-size: 15px;
+    }
+    #sharing-page h1 small {
+        font-size: 1.2rem;
+    }
+    #sharing-page h1 {
+        font-size: 1rem;
+    }
+    .greeting-show .greeting-actions .start-now {
+        padding: 12px 4rem;
+        font-size: 14px;
     }
 }
