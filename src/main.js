@@ -231,15 +231,20 @@ class AdUnit extends Mads {
             <div style="height:100%;">
               <h1><small>STEP 2</small>MAKE A WISH FOR YOUR FRIEND</h1>
               <div id="slider">
-                  <div><img src="img/sc05-text-white-01.svg" alt=""></div>
-                  <div><img src="img/sc05-text-white-02.svg" alt=""></div>
-                  <div><img src="img/sc05-text-white-03.svg" alt=""></div>
-                  <div><img src="img/sc05-text-white-04.svg" alt=""></div>
-                  <div><img src="img/sc05-text-white-05.svg" alt=""></div>
-                  <div><img src="img/sc05-text-white-06.svg" alt=""></div>
+                  <div><img src="img/sc05-text-white-01.svg" alt="" rel="1"></div>
+                  <div><img src="img/sc05-text-white-02.svg" alt="" rel="2"></div>
+                  <div><img src="img/sc05-text-white-03.svg" alt="" rel="3"></div>
+                  <div><img src="img/sc05-text-white-04.svg" alt="" rel="4"></div>
+                  <div><img src="img/sc05-text-white-05.svg" alt="" rel="5"></div>
+                  <div><img src="img/sc05-text-white-06.svg" alt="" rel="6"></div>
+                  <div><img src="img/sc05-text-white-07.svg" alt="" rel="7"></div>
+                  <div><img src="img/sc05-text-white-08.svg" alt="" rel="8"></div>
               </div>
               <div class="greeting-actions">
-                <span class="greeting-translation" id="greeting-translation">Happy Chinese New Year</span>
+                <div class="greeting-translation" id="greeting-translation">
+                  <div class="first-greeting-text active">Happy Chinese New Year</div>
+                  <div class="second-greeting-text"></div>
+                </div>
                 <button class="start-now invert" id="btn-greeting-next">CONTINUE</button>
               </div>
             </div>
@@ -458,28 +463,10 @@ class AdUnit extends Mads {
           this.loadJS(this.resolve('js/slick.min.js')).then(() => {
             $('#slider').slick({ // eslint-disable-line
               centerMode: true,
-              centerPadding: '60px',
+              centerPadding: '0px',
               slidesToShow: 5,
               adaptiveHeight: true,
               responsive: [
-                {
-                  breakpoint: 768,
-                  settings: {
-                    // arrows: false,
-                    centerMode: true,
-                    centerPadding: '40px',
-                    slidesToShow: 5,
-                  },
-                },
-                {
-                  breakpoint: 480,
-                  settings: {
-                    // arrows: false,
-                    centerMode: true,
-                    centerPadding: '40px',
-                    slidesToShow: 5,
-                  },
-                },
               ],
             });
 
@@ -489,6 +476,25 @@ class AdUnit extends Mads {
             //   applyStyleToSiblings();
             // })
               .on('beforeChange', (event, slick, currentSlide, nextSlide) => {
+                console.log(currentSlide);
+                console.log(nextSlide);
+                if ((nextSlide > currentSlide && nextSlide !== 0) || currentSlide === 7) {
+                  /* before change */
+                  $('.slick-slide').removeClass('slick-opac');
+                  $('.slick-current').prev().addClass('slick-opac');
+                  const temp = $('.slick-current').next().next();
+                  temp.next().addClass('slick-opac');
+                } else {
+                  /* before change */
+                  $('.slick-slide').removeClass('slick-opac');
+                  $('.slick-current').next().addClass('slick-opac');
+                  const temp = $('.slick-current').prev().prev();
+                  temp.prev().addClass('slick-opac');
+                }
+                /**/
+                const rel = $('.slick-current img').attr('rel');
+                $('.slick-current img').attr('src', `img/sc05-text-white-0${rel}.svg`);
+
                 let translation = 'Happy Chinese New Year';
                 switch (nextSlide) {
                   case 0:
@@ -509,11 +515,35 @@ class AdUnit extends Mads {
                   case 5:
                     translation = 'Blessed New Year';
                     break;
-                  default:
+                  case 6:
                     translation = 'Happy Chinese New Year';
+                    break;
+                  case 7:
+                    translation = 'May All Your Wishes Come True';
+                    break;
+                  default:
+                    translation = 'Wishing You And Your Family Health And Happiness';
                 }
-                this.elems['greeting-translation'].innerText = translation;
+                /* english wish change and fade */
+                if ($('.first-greeting-text').hasClass('active')) {
+                  $('.first-greeting-text').fadeOut().removeClass('active');
+                  $('.second-greeting-text').html(translation).fadeIn().addClass('active');
+                } else {
+                  $('.second-greeting-text').fadeOut().removeClass('active');
+                  $('.first-greeting-text').html(translation).fadeIn().addClass('active');
+                }
               });
+            $('#slider').on('afterChange', () => {
+              /**/
+              const rel = $('.slick-current img').attr('rel');
+              $('.slick-current img').attr('src', `img/sc05-text-yellow-0${rel}.svg`);
+            });
+            /* on init */
+            $('.slick-slide').removeClass('slick-opac');
+            $('.slick-current').prev().prev().addClass('slick-opac');
+            $('.slick-current').next().next().addClass('slick-opac');
+            const temp = $('.slick-current img').attr('rel');
+            $('.slick-current img').attr('src', `img/sc05-text-yellow-0${temp}.svg`);
           });
         });
       }, 1000);

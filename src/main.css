@@ -396,11 +396,13 @@ h1, h2 {
 }
 
 .slick-prev {
-    left: 37%;
+    left: 35%;
+    margin-top: -10px;
 }
 
 .slick-next {
-    right: 37%;
+    right: 35%;
+    margin-top: -10px;
 }
 
 .slick-arrow {
@@ -451,9 +453,12 @@ h1, h2 {
 #slider .slick-slide {
      transform: scale(0.9);
  }
+#slider .slick-current img {
+    transform: scale(1.3);
+} 
 
 #slider .slick-slide:not(.slick-center) {
-    transform: scale(0.3);
+    transform: scale(0.4);
 }
 
 #slider .slick-slide.slick-center img {
@@ -466,7 +471,7 @@ h1, h2 {
 #slider .slick-slide.slick-center:before {
     content: ' ';
     height: 100%;
-    width: 140%;
+    width: 110%;
     position: absolute;
     background-size: contain;
     background-repeat: no-repeat;
@@ -486,6 +491,10 @@ h1, h2 {
 .slick-track > .slick-active:first-child, .slick-track > .slick-active:last-child {
     transform: scale(0.25);
     opacity: 0.7;
+}
+.slick-opac {
+    opacity: 0.5;
+    transform: scale(0.3) !important;
 }
 
 #end-page {
@@ -527,14 +536,14 @@ h1, h2 {
 
 @media (min-width: 768px) {
     #slider .slick-slide.slick-center img {
-        height: 34%;
+        height: 45%;
     }
     #slider .slick-slide {
         transform: scale(0.9);
     }
 
     #slider .slick-slide:not(.slick-center) {
-        transform: scale(0.5);
+        transform: scale(0.4);
     }
 
     .sharing-intro-show .start-now {
@@ -542,6 +551,9 @@ h1, h2 {
     }
     .game-show h1 {
         font-size: 48px;
+    }
+    #slider .slick-slide.slick-center:before {
+        width: 90%;
     }
 }
 
@@ -577,4 +589,27 @@ h1, h2 {
         padding: 12px 4rem;
         font-size: 14px;
     }
+    #slider .slick-slide.slick-center:before {
+        width: 115%;
+    }
+    #btn-edit-greeting {
+        padding: 10px 1rem;
+        font-size: 16px;
+    }
+}
+
+.first-greeting-text, .second-greeting-text {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    width: 100%;
+}
+.greeting-translation {
+    position: relative;
+    top: 0;
+    width: 100%;
+    margin: 0 auto;
+    height: 20px;
+    text-align: center;
 }
