@@ -257,9 +257,9 @@ class AdUnit extends Mads {
               <div class="share-left">
                   <span>Send him out and watch him dance in the Lunar New Year!</span>
                   <div class="sharing-icons-2" id="sharing-icons-2">
-                     <img id="share-fb" src="img/share-fb.png" alt="">
-                     <img id="share-twitter" src="img/share-twitter.png" alt="">
-                     <a href="data:image/jpeg;base64,/9j/4AAQSkZ..." id="share-download" download="tnb_share.gif"><img src="img/share-download.png" alt=""></a>
+                     <a href="#" target="_blank" id="a-share-fb"><img id="share-fb" src="img/share-fb.png" alt=""></a>
+                     <a href="#" target="_blank" id="a-share-twitter"><img id="share-twitter" src="img/share-twitter.png" alt=""></a>
+                     <a href="data:image/jpeg;base64,/9j/4AAQSkZ..." target="_blank" id="share-download" download="tnb_share.gif"><img src="img/share-download.png" alt=""></a>
                   </div>
                   <button class="start-now invert" id="btn-edit-greeting">EDIT GREETING</button>
               </div>
@@ -597,7 +597,7 @@ class AdUnit extends Mads {
           }
         },
         gif7: (callback) => {
-          callback(null, { result: this.resolve('img/asset-7---background.png') });
+          callback(null, { result: this.resolve('img/asset-7---full.png') });
         },
         gif6: (callback) => {
           try {
@@ -732,7 +732,7 @@ class AdUnit extends Mads {
             quality: 10,
             workerScript: this.resolve('js/gif.worker.js'),
           });
-          [gif8, gif7, gif6, gif5, gif4, gif3, gif2, gif1].forEach((img, index) => {
+          [gif1, gif2, gif3, gif4, gif5, gif6, gif7, gif8].forEach((img, index) => {
             const i = new window.Image();
             i.onload = () => {
               gif.addFrame(i);
@@ -908,9 +908,9 @@ class AdUnit extends Mads {
             if (htmlXhr.readyState === 4) {
               const htmlUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/index.html`;
               if (social === 'fb') {
-                this.linkOpener(`https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
+                this.elems['a-share-fb'].setAttribute(`https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
               } else if (social === 'twitter') {
-                this.linkOpener(`https://twitter.com/intent/tweet?text=${this.description}&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
+                this.elems['a-share-twitter'].setAttribute(`https://twitter.com/intent/tweet?text=${this.description}&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
               }
               this.elems['loading-page'].style.display = 'none';
               this.elems['share-page'].style.display = 'none';
