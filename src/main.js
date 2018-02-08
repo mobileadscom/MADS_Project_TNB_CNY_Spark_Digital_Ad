@@ -493,21 +493,7 @@ class AdUnit extends Mads {
             //   applyStyleToSiblings();
             // })
               .on('beforeChange', (event, slick, currentSlide, nextSlide) => {
-                console.log(currentSlide);
-                console.log(nextSlide);
-                if ((nextSlide > currentSlide && nextSlide !== 0) || currentSlide === 7) {
-                  /* before change */
-                  $('.slick-slide').removeClass('slick-opac');
-                  $('.slick-current').prev().addClass('slick-opac');
-                  const temp = $('.slick-current').next().next();
-                  temp.next().addClass('slick-opac');
-                } else {
-                  /* before change */
-                  $('.slick-slide').removeClass('slick-opac');
-                  $('.slick-current').next().addClass('slick-opac');
-                  const temp = $('.slick-current').prev().prev();
-                  temp.prev().addClass('slick-opac');
-                }
+                $('.slick-slide').removeClass('slick-opac');
                 /**/
                 const rel = $('.slick-current img').attr('rel');
                 $('.slick-current img').attr('src', `img/sc05-text-white-0${rel}.svg`);
@@ -552,6 +538,8 @@ class AdUnit extends Mads {
               });
             $('#slider').on('afterChange', () => {
               /**/
+              $('.slick-active').first().addClass('slick-opac');
+              $('.slick-active').last().addClass('slick-opac');
               const rel = $('.slick-current img').attr('rel');
               $('.slick-current img').attr('src', `img/sc05-text-yellow-0${rel}.svg`);
             });
