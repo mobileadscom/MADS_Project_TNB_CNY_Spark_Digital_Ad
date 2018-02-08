@@ -908,9 +908,9 @@ class AdUnit extends Mads {
             if (htmlXhr.readyState === 4) {
               const htmlUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/index.html`;
               if (social === 'fb') {
-                this.elems['a-share-fb'].setAttribute(`https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
+                this.elems['a-share-fb'].setAttribute('href', `https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
               } else if (social === 'twitter') {
-                this.elems['a-share-twitter'].setAttribute(`https://twitter.com/intent/tweet?text=${this.description}&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
+                this.elems['a-share-twitter'].setAttribute('href', `https://twitter.com/intent/tweet?text=${this.description}&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
               }
               this.elems['loading-page'].style.display = 'none';
               this.elems['share-page'].style.display = 'none';
