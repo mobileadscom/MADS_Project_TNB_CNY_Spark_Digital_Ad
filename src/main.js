@@ -239,8 +239,8 @@ class AdUnit extends Mads {
                   <div><img src="img/sc05-text-white-04.svg" alt="" rel="4"></div>
                   <div><img src="img/sc05-text-white-05.svg" alt="" rel="5"></div>
                   <div><img src="img/sc05-text-white-06.svg" alt="" rel="6"></div>
-                  <div><img src="img/sc05-text-white-07.svg" alt="" rel="7"></div>
-                  <div><img src="img/sc05-text-white-08.svg" alt="" rel="8"></div>
+                  <div><img src="img/sc05-text-white-07.svg" class="img-200" alt="" rel="7"></div>
+                  <div><img src="img/sc05-text-white-08.svg" class="img-200" alt="" rel="8"></div>
               </div>
               <div class="greeting-actions">
                 <div class="greeting-translation" id="greeting-translation">

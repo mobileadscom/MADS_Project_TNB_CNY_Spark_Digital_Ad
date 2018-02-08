@@ -637,3 +637,7 @@ h1, h2 {
     height: 20px;
     text-align: center;
 }
+
+.img-200 {
+    width: 200%;
+}
