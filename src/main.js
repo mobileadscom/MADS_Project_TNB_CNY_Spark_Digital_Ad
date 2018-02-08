@@ -429,6 +429,9 @@ class AdUnit extends Mads {
           this.allowContinue = true;
           this.video.player.playVideo();
           this.elems.gameContainer.style.zIndex = -100;
+          setTimeout(() => {
+            this.elems['skip-video'].style.left = '0px';
+          }, 100);
         };
       });
     });

@@ -650,8 +650,10 @@ h1, h2 {
     opacity: 0.7;
     color: white;
     position: absolute;
-    bottom: 40px;
+    bottom: 50px;
     z-index: 9;
     padding: 10px;
     display: none;
+    transition: all 1s;
+    left: -100%;
 }
