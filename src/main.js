@@ -339,6 +339,7 @@ class AdUnit extends Mads {
             this.videoPage.style.display = 'none';
             this.gamePage.style.zIndex = 1;
             this.gamePage.style.visibility = 'visible';
+            this.elems['skip-video'].style.display = 'block';
           }
         },
         playing: () => {

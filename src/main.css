@@ -653,4 +653,5 @@ h1, h2 {
     bottom: 40px;
     z-index: 9;
     padding: 10px;
+    display: none;
 }
