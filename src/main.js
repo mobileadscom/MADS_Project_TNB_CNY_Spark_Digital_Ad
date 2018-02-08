@@ -621,6 +621,7 @@ class AdUnit extends Mads {
             if (htmlXhr.readyState === 4) {
               const htmlUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/index.html`;
               this.elems['a-share-fb'].setAttribute('href', `https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
+              console.log(this.elems['a-share-twitter']);
               this.elems['a-share-twitter'].setAttribute('href', `https://twitter.com/intent/tweet?text=${this.description}&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
               this.elems['loading-page'].style.display = 'none';
               this.elems['share-page'].style.display = 'none';
@@ -834,6 +835,7 @@ class AdUnit extends Mads {
                 this.elems['greeting-page'].style.display = 'none';
                 this.elems['share-page'].style.display = 'block';
                 this.elems['share-page'].style.opacity = '1';
+                this.elems['end-page'].style.display = 'none';
                 this.elems['loading-page'].style.display = 'none';
               });
             };
@@ -923,16 +925,15 @@ class AdUnit extends Mads {
       this.elems['sharing-intro-page'].style.display = 'none';
     });
 
-    // this.elems['share-fb'].addEventListener('mousedown', () => {
-    //   this.tracker('E', 'share_facebook');
-    //   this.elems['loading-page'].style.display = 'flex';
-    // });
-    //
-    // this.elems['share-twitter'].addEventListener('mousedown', () => {
-    //   this.tracker('E', 'share_twitter');
-    //   this.elems['loading-page'].style.display = 'flex';
-    //   uploadEverything(this.finishGifBlob, 'twitter');
-    // });
+    this.elems['a-share-fb'].addEventListener('click', () => {
+      this.tracker('E', 'share_facebook');
+      this.elems['end-page'].style.display = 'flex';
+    });
+
+    this.elems['a-share-twitter'].addEventListener('click', () => {
+      this.tracker('E', 'share_twitter');
+      this.elems['end-page'].style.display = 'flex';
+    });
 
     this.elems['share-download'].addEventListener('click', () => {
       this.tracker('E', 'download');
