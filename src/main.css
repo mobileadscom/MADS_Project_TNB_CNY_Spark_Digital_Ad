@@ -630,6 +630,16 @@ h1, h2 {
     }
 }
 
+@media (min-width: 1024px) {
+
+    #slider .slick-slide.slick-center:before {
+        width: 160%;
+    }
+    .slick-slide img {
+        width: 400%;
+    }
+}
+
 .first-greeting-text, .second-greeting-text {
     position: absolute;
     top: 0px;
