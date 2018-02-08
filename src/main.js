@@ -62,7 +62,7 @@ class AdUnit extends Mads {
           <img src="img/the-coming-together.svg" id="desktop-logo" alt="">
           <img src="img/tenaga-nasional-logo.svg" alt="">
         </div>
-        <div id="video-page" class="video-show"><div class="video-container"><div id="video-frame"></div></div></div>
+        <div id="video-page" class="video-show"><div class="video-container"><button id="skip-video">Send A Greeting</button><div id="video-frame"></div></div></div>
         <div id="game-page" class="game-show">
             <div id="game-initial">
               <h1>FASSSSTTEERRRR!!!</h1>
@@ -991,6 +991,24 @@ class AdUnit extends Mads {
         };
         reader.readAsDataURL(input.files[0]);
       }
+    });
+
+    this.elems['skip-video'].addEventListener('click', () => {
+      if (!window.game) {
+        this.loadJS(this.resolve('js/game.js')).then(() => {
+          console.log(typeof window.game !== 'undefined' ? 'game loaded' : 'game not loaded');
+          window.game.init();
+          window.game.continue = () => {
+            this.videoPage.style.zIndex = 1;
+            this.gamePage.style.zIndex = 0;
+            this.allowContinue = true;
+            this.video.player.playVideo();
+            this.elems.gameContainer.style.zIndex = -100;
+          };
+        });
+      }
+      this.video.player.pauseVideo();
+      fadeOutIn(this.elems.start, this.sharingIntroPage, { display: 'flex' });
     });
   }
 }
