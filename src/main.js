@@ -336,6 +336,7 @@ class AdUnit extends Mads {
           if (time > 35 && !this.allowContinue) {
             player.pauseVideo();
             this.videoPage.style.zIndex = 0;
+            this.videoPage.style.display = 'none';
             this.gamePage.style.zIndex = 1;
             this.gamePage.style.visibility = 'visible';
           }
@@ -422,6 +423,7 @@ class AdUnit extends Mads {
         window.game.init();
         window.game.continue = () => {
           this.videoPage.style.zIndex = 1;
+          this.videoPage.style.display = 'block';
           this.gamePage.style.zIndex = 0;
           this.allowContinue = true;
           this.video.player.playVideo();
