@@ -622,6 +622,12 @@ h1, h2 {
         padding: 10px 1rem;
         font-size: 16px;
     }
+    .sharing-intro-show h1 {
+        font-size: 1.2rem;
+    }
+    .sharing-intro-show small {
+        font-size: 0.8rem;
+    }
 }
 
 .first-greeting-text, .second-greeting-text {

@@ -195,7 +195,7 @@ class AdUnit extends Mads {
       </div>
       <div id="sharing-intro-page" style="display:none;" class="sharing-intro-show">
           <div class="sharing-left">
-            <h1>IT ONLY TAKES A SPARK TO MAKE THE NEW YEAR BRIGHTER <small>Personalise your own spark in 3 steps out this Lunar New Year</small></h1>
+            <h1>Chinese New Year becomes brighter when we are all in it together <small>Personalise your own greeting in 3 steps this Lunar New Year</small></h1>
             <div class="sharing-icons">
                 <div class="camera">
                     <img src="img/icon-camera.svg" alt="">
