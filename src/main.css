@@ -372,11 +372,13 @@ h1, h2 {
 .slick-prev {
     left: 35%;
     margin-top: -10px;
+    height: 30px;
 }
 
 .slick-next {
     right: 35%;
     margin-top: -10px;
+    height: 30px;
 }
 
 .slick-arrow {
