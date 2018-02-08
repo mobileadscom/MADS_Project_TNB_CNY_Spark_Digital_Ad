@@ -1,29 +1,48 @@
 var game = {
 	ended: true,
 	container: null,
+	openScroll: function(rank) {
+        var headL = document.getElementById('scrollHeaderL');
+        var sBody = document.getElementById('scrollBodyWrapper');
+        var scroll = document.getElementById('scrollBody');
+        var headR = document.getElementById('scrollHeaderR');
+        var sWrapper = document.getElementById('gameScrollWrapper');
+        var msgTitle = document.getElementById('mainMsg');
+        headL.style.left = (sWrapper.clientWidth / 2 - headL.clientWidth).toString() + 'px';
+        headR.style.right = (sWrapper.clientWidth / 2 - headR.clientWidth).toString() + 'px';
+        sBody.style.width = '0px';
+        scroll.style.width = (sWrapper.clientWidth - headL.clientWidth * 2).toString() + 'px';
+        scroll.src = 'img/score' + rank + 'Scroll.png';
+        msgTitle.src = 'img/score' + rank + 'Title.png';
+        setTimeout(function() {
+	        headL.style.transition = 'all 0.6s';
+	        headR.style.transition = 'all 0.6s';
+	        sBody.style.transition = 'all 0.6s';
+	        headL.style.left = '0px';
+	        headR.style.right = '0px';
+	        sBody.style.width = (sWrapper.clientWidth - headL.clientWidth * 2).toString() + 'px';
+        }, 1300);
+
+	},
 	over: function(score) {
 		game.ended = true;
-        var msgImg = new Image();
+		var rank = '1';
         if (score == 10) {
-            msgImg.src = 'img/score4.png';
+            rank = '4';
             document.getElementById('gameRetry').style.display = 'none';
         }
         else if (score > 6) {
-        	msgImg.src = 'img/score3.png';
+        	rank = '3';
         }
         else if (score > 3) {
-        	msgImg.src = 'img/score2.png';
+        	rank = '2';
         }
         else {
-        	msgImg.src = 'img/score1.png';
+        	rank = '1';
         }
         var endScreen = document.getElementById('gameEndScreen');
         endScreen.style.display = 'block';
-        msgImg.onload = function() {
-        	var msgWrapper = document.getElementById('gameMsgWrapper');
-            msgImg.id = "gameEndMsg";
-        	msgWrapper.appendChild(msgImg);
-        }
+        this.openScroll(rank);
         setTimeout(function() {
             endScreen.style.opacity = '0.9';
         }, 500)
@@ -83,8 +102,8 @@ var game = {
 
         /* hide endScreen */
         var endScreen = document.getElementById('gameEndScreen');
-        var msgImg = document.getElementById('gameEndMsg');
-        msgImg.parentNode.removeChild(msgImg);
+        // var msgImg = document.getElementById('gameEndMsg');
+        // msgImg.parentNode.removeChild(msgImg);
         endScreen.style.opacity = '0';
         document.getElementById('gameRetry').style.display = 'block';
         endScreen.style.display = 'none';

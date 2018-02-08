@@ -178,6 +178,12 @@ class AdUnit extends Mads {
             <div class="endScreen" id="gameEndScreen">
               <div class="end-wrapper">
                     <div class="msg-wrapper" id="gameMsgWrapper">
+                      <img id="mainMsg" />
+                      <div id="gameScrollWrapper" class="scroll-wrapper">
+                        <img id="scrollHeaderL" src="img/scrollHeaderL.png" class="scrollHeader" />
+                        <div id="scrollBodyWrapper" class="scroll"> <img id="scrollBody" /></div>
+                        <img id="scrollHeaderR" src="img/scrollHeaderR.png" class="scrollHeader" />
+                      </div>
                     </div>
                     <div class="menu">
                         <button class="continue" id="gameContinue">CONTINUE VIDEO</button>
