@@ -53,7 +53,7 @@ class AdUnit extends Mads {
     return `
       
       <div id="portrait-page" class="portrait-show">
-          <img src="img/operation-feather-duster.svg" style="width:50%;" alt="">
+          <img src="img/the-coming-together.svg" style="width:50%;" alt="">
           <img src="img/more-ong-tilt.png" class="img-fluid" alt="">
           <img src="img/tenaga-nasional-logo.svg" style="width:40%;" alt="">
       </div>
@@ -321,7 +321,7 @@ class AdUnit extends Mads {
         container: 'video-frame',
         videoId: 'jpqT1dNOAp8', // 'IGQBtbKSVhY', // 'jpqT1dNOAp8',
         playerVars: {
-          controls: 0,
+          controls: 1,
           playsinline: 1,
           showinfo: 0,
           rel: 0,
@@ -375,11 +375,13 @@ class AdUnit extends Mads {
 
     return [...links, `
       body, .portrait-show, #loading-page, #end-page {
-        background: url(${this.resolve('img/bg1.png')});
+        /* background: url(${this.resolve('img/bg1.png')}); */
+        background-color: #e43222;
       }       
       .game-show:before {
         content: ' ';
-        background: url(${this.resolve('img/bg1.png')});
+        /* background: url(${this.resolve('img/bg1.png')}); */
+        background-color: #e43222;
         position: absolute;
         top: 0;
         left: 0;
@@ -559,6 +561,82 @@ class AdUnit extends Mads {
         });
       }, 1000);
     };
+
+    const uploadEverything = blob => new Promise((resolve) => {
+      const timeNow = window.Math.floor(window.Date.now() / 1000);
+      const data = new window.FormData();
+      data.append('pic[]', blob);
+      data.append('path', `4220/custom/tnb_cny/uploads/${timeNow}`);
+      data.append('name', 'image.gif');
+
+      const xhr = new window.XMLHttpRequest();
+      xhr.addEventListener('readystatechange', () => {
+        if (xhr.readyState === 4) {
+          const htmlGIFUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/image.gif`;
+          const siteUri = 'https://tnb.com.my';
+
+          const htmlToShare = `<!doctype html>
+              <html lang="en">
+              <head>
+                  <meta charset="UTF-8">
+                  <meta name="viewport"
+                        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+                  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                  <meta property="og:site_name" content="${this.title}">
+                  <meta property="og:url" content="${htmlGIFUri}">
+                  <meta property="og:title" content="${this.title}">
+                  <meta property="og:description" content="${this.description}">
+                  <meta property="og:type" content="video.other">
+                  <meta property="og:image" content="${htmlGIFUri}">
+                  <meta property="og:image:width" content="${this.finishGifData.width}">
+                  <meta property="og:image:height" content=${this.finishGifData.height}">
+
+              
+                  <meta name="DC.title" content="${this.title}">
+              
+                  <meta name="twitter:card" content="player">
+                  <meta name="twitter:url" content="${htmlGIFUri}">
+                  <meta name="twitter:site" content="@Tenaga_Nasional">
+                  <meta name="twitter:title" content="${this.title}">
+                  <meta name="twitter:description" content="${htmlGIFUri}">
+                  <meta name="twitter:creator" content="@Tenaga_Nasional">
+                  <meta name="twitter:image" content="${htmlGIFUri}">
+                  <meta name="twitter:domain" content="tnb.com.my">
+                  <title>${this.title}</title>
+              </head>
+              <body style="margin:0;padding:0;">
+                <img src="${htmlGIFUri}" style="width:100%;" alt="">
+              </body>
+              </html>`;
+
+          const uploadHTML = new window.Blob([htmlToShare], { type: 'text/html' });
+
+          const htmlData = new window.FormData();
+          htmlData.append('pic[]', uploadHTML);
+          htmlData.append('path', `4220/custom/tnb_cny/uploads/${timeNow}`);
+          htmlData.append('name', 'index.html');
+
+          const htmlXhr = new window.XMLHttpRequest();
+          htmlXhr.addEventListener('readystatechange', () => {
+            if (htmlXhr.readyState === 4) {
+              const htmlUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/index.html`;
+              this.elems['a-share-fb'].setAttribute('href', `https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
+              this.elems['a-share-twitter'].setAttribute('href', `https://twitter.com/intent/tweet?text=${this.description}&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
+              this.elems['loading-page'].style.display = 'none';
+              this.elems['share-page'].style.display = 'none';
+              this.elems['end-page'].style.display = 'flex';
+              resolve();
+            }
+          });
+          htmlXhr.open('POST', 'https://www.mobileads.com/upload-image-twtbk');
+          htmlXhr.setRequestHeader('cache-control', 'no-cache');
+          htmlXhr.send(htmlData);
+        }
+      });
+      xhr.open('POST', 'https://www.mobileads.com/upload-image-twtbk');
+      xhr.setRequestHeader('cache-control', 'no-cache');
+      xhr.send(data);
+    });
 
     this.elems['btn-greeting-next'].addEventListener('mousedown', () => {
       this.tracker('E', 'finish_greeting');
@@ -752,10 +830,12 @@ class AdUnit extends Mads {
               };
               this.elems['share-right'].innerHTML = '';
               this.elems['share-right'].appendChild(this.finishGifEl);
-              this.elems['greeting-page'].style.display = 'none';
-              this.elems['share-page'].style.display = 'block';
-              this.elems['share-page'].style.opacity = '1';
-              this.elems['loading-page'].style.display = 'none';
+              uploadEverything(this.finishGifBlob).then(() => {
+                this.elems['greeting-page'].style.display = 'none';
+                this.elems['share-page'].style.display = 'block';
+                this.elems['share-page'].style.opacity = '1';
+                this.elems['loading-page'].style.display = 'none';
+              });
             };
             this.finishGifEl.src = this.finishGif;
             this.elems['share-download'].setAttribute('href', this.finishGif);
@@ -843,96 +923,16 @@ class AdUnit extends Mads {
       this.elems['sharing-intro-page'].style.display = 'none';
     });
 
-    const uploadEverything = (blob, social) => new Promise((resolve) => {
-      const timeNow = window.Math.floor(window.Date.now() / 1000);
-      const data = new window.FormData();
-      data.append('pic[]', blob);
-      data.append('path', `4220/custom/tnb_cny/uploads/${timeNow}`);
-      data.append('name', 'image.gif');
-
-      const xhr = new window.XMLHttpRequest();
-      xhr.addEventListener('readystatechange', () => {
-        if (xhr.readyState === 4) {
-          const htmlGIFUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/image.gif`;
-          const siteUri = 'https://tnb.com.my';
-
-          const htmlToShare = `<!doctype html>
-              <html lang="en">
-              <head>
-                  <meta charset="UTF-8">
-                  <meta name="viewport"
-                        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-                  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-                  <meta property="og:site_name" content="${this.title}">
-                  <meta property="og:url" content="${htmlGIFUri}">
-                  <meta property="og:title" content="${this.title}">
-                  <meta property="og:description" content="${this.description}">
-                  <meta property="og:type" content="video.other">
-                  <meta property="og:image" content="${htmlGIFUri}">
-                  <meta property="og:image:width" content="${this.finishGifData.width}">
-                  <meta property="og:image:height" content=${this.finishGifData.height}">
-
-              
-                  <meta name="DC.title" content="${this.title}">
-              
-                  <meta name="twitter:card" content="player">
-                  <meta name="twitter:url" content="${htmlGIFUri}">
-                  <meta name="twitter:site" content="@Tenaga_Nasional">
-                  <meta name="twitter:title" content="${this.title}">
-                  <meta name="twitter:description" content="${htmlGIFUri}">
-                  <meta name="twitter:creator" content="@Tenaga_Nasional">
-                  <meta name="twitter:image" content="${htmlGIFUri}">
-                  <meta name="twitter:domain" content="tnb.com.my">
-                  <title>${this.title}</title>
-              </head>
-              <body style="margin:0;padding:0;">
-                <img src="${htmlGIFUri}" style="width:100%;" alt="">
-              </body>
-              </html>`;
-
-          const uploadHTML = new window.Blob([htmlToShare], { type: 'text/html' });
-
-          const htmlData = new window.FormData();
-          htmlData.append('pic[]', uploadHTML);
-          htmlData.append('path', `4220/custom/tnb_cny/uploads/${timeNow}`);
-          htmlData.append('name', 'index.html');
-
-          const htmlXhr = new window.XMLHttpRequest();
-          htmlXhr.addEventListener('readystatechange', () => {
-            if (htmlXhr.readyState === 4) {
-              const htmlUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/index.html`;
-              if (social === 'fb') {
-                this.elems['a-share-fb'].setAttribute('href', `https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
-              } else if (social === 'twitter') {
-                this.elems['a-share-twitter'].setAttribute('href', `https://twitter.com/intent/tweet?text=${this.description}&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
-              }
-              this.elems['loading-page'].style.display = 'none';
-              this.elems['share-page'].style.display = 'none';
-              this.elems['end-page'].style.display = 'flex';
-              resolve();
-            }
-          });
-          htmlXhr.open('POST', 'https://www.mobileads.com/upload-image-twtbk');
-          htmlXhr.setRequestHeader('cache-control', 'no-cache');
-          htmlXhr.send(htmlData);
-        }
-      });
-      xhr.open('POST', 'https://www.mobileads.com/upload-image-twtbk');
-      xhr.setRequestHeader('cache-control', 'no-cache');
-      xhr.send(data);
-    });
-
-    this.elems['share-fb'].addEventListener('mousedown', () => {
-      this.tracker('E', 'share_facebook');
-      this.elems['loading-page'].style.display = 'flex';
-      uploadEverything(this.finishGifBlob, 'fb');
-    });
-
-    this.elems['share-twitter'].addEventListener('mousedown', () => {
-      this.tracker('E', 'share_twitter');
-      this.elems['loading-page'].style.display = 'flex';
-      uploadEverything(this.finishGifBlob, 'twitter');
-    });
+    // this.elems['share-fb'].addEventListener('mousedown', () => {
+    //   this.tracker('E', 'share_facebook');
+    //   this.elems['loading-page'].style.display = 'flex';
+    // });
+    //
+    // this.elems['share-twitter'].addEventListener('mousedown', () => {
+    //   this.tracker('E', 'share_twitter');
+    //   this.elems['loading-page'].style.display = 'flex';
+    //   uploadEverything(this.finishGifBlob, 'twitter');
+    // });
 
     this.elems['share-download'].addEventListener('click', () => {
       this.tracker('E', 'download');
