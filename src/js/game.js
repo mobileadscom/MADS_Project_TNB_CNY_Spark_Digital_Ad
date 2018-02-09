@@ -188,8 +188,16 @@ var game = {
 
 	    // create clickables on items
 	    var bg = new Image();
+	    var offsetX = 0;
+	    var offsetY = 0;
 	    var clickContainer = document.getElementById('gameBgWrapper');
-	    bg.src = 'img/game-bg2.jpg';
+	    if (_this.container.clientWidth > 600) {
+	    	bg.src = 'img/game-bg2.jpg';
+	    }
+	    else {
+	    	bg.src = 'img/game-bg3.jpg';
+	    	offsetX = -250;
+	    }
 
         bg.onload = function() {
         	_this.ended = false;
@@ -256,12 +264,12 @@ var game = {
 		        }
 		    ]
 
-		    clickContainer.style.position = 'relative';
+            clickContainer.style.position = 'relative';
 		    for ( var c in clickables ) {
 		        var cBox = document.createElement('div');
 		        cBox.style.position = 'absolute';
 		        cBox.style.top = (bg.offsetTop + clickables[c].top * scaleY).toString() + 'px';
-		        cBox.style.left = (bg.offsetLeft + clickables[c].left * scaleX).toString() + 'px';
+		        cBox.style.left = ((bg.offsetLeft + clickables[c].left + offsetX) * scaleX).toString() + 'px';
 		        cBox.style.width = (clickables[c].width * scaleX).toString() + 'px';
 		        cBox.style.height = (clickables[c].height * scaleY).toString() + 'px';
 		        cBox.style.transition = 'all 0.3s';
@@ -280,7 +288,7 @@ var game = {
 			    var scaleY = img.height / img.nHeight;
 		        for ( var c in _this.item.clickBox) {
 			        _this.item.clickBox[c].style.top = (bg.offsetTop + clickables[c].top * scaleY).toString() + 'px';
-			        _this.item.clickBox[c].style.left = (bg.offsetLeft + clickables[c].left * scaleX).toString() + 'px';
+			        _this.item.clickBox[c].style.left = ((bg.offsetLeft + clickables[c].left + offsetX) * scaleX).toString() + 'px';
 			        _this.item.clickBox[c].style.width = (clickables[c].width * scaleX).toString() + 'px';
 			        _this.item.clickBox[c].style.height = (clickables[c].height * scaleY).toString() + 'px';
 			    }
