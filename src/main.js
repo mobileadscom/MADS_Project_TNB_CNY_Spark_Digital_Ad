@@ -53,8 +53,8 @@ class AdUnit extends Mads {
     return `
       
       <div id="portrait-page" class="portrait-show">
-          <img src="img/the-coming-together.svg" style="width:50%;" alt="">
-          <img src="img/more-ong-tilt.png" class="img-fluid" alt="">
+          <img src="img/the-coming-together2.svg" style="width:50%;" alt="">
+          <img src="img/more-ong-tilt2.png" class="img-fluid" alt="">
           <img src="img/tenaga-nasional-logo.svg" style="width:40%;" alt="">
       </div>
       <div id="start">
