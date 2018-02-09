@@ -26,7 +26,7 @@ class AdUnit extends Mads {
     this.isMobile = this.mobileAndTabletCheck();
     this.orientation = 'portrait';
     this.title = 'The Coming Together';
-    this.description = 'Come together this Chinese New Year with Tenaga Nasional.';
+    this.description = 'Our family is the light of our life. Tenaga National Berhad wishes Gong Xi Fa Cai to those celebrating.';
     // this.loadCSS(this.resolve('css/game.css'));
   }
 
@@ -592,7 +592,7 @@ class AdUnit extends Mads {
                   <meta property="og:url" content="${htmlGIFUri}">
                   <meta property="og:title" content="${this.title}">
                   <meta property="og:description" content="${this.description}">
-                  <meta property="og:type" content="video.other">
+                  <meta property="og:type" content="website">
                   <meta property="og:image" content="${htmlGIFUri}">
                   <meta property="og:image:width" content="${this.finishGifData.width}">
                   <meta property="og:image:height" content=${this.finishGifData.height}">
@@ -610,8 +610,12 @@ class AdUnit extends Mads {
                   <meta name="twitter:domain" content="tnb.com.my">
                   <title>${this.title}</title>
               </head>
-              <body style="margin:0;padding:0;">
-                <img src="${htmlGIFUri}" style="width:100%;" alt="">
+
+              <body style="margin:0;padding:0;background:#E43222;">
+                <a href="https://thecomingtogether.com.my" style="text-align:  center;"><img src="${htmlGIFUri}" style="width:100%;display:block;margin:auto;max-width:400px;" alt=""></a>
+                <a href="https://thecomingtogether.com.my" style="text-align:center;display:block;margin:auto;color:white;font-size:16px;font-family:arial;text-decoration:underline;">
+                  Send A Greeting
+                </a>
               </body>
               </html>`;
 
@@ -628,7 +632,7 @@ class AdUnit extends Mads {
               const htmlUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/index.html`;
               this.elems['a-share-fb'].setAttribute('href', `https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
               console.log(this.elems['a-share-twitter']);
-              this.elems['a-share-twitter'].setAttribute('href', `https://twitter.com/intent/tweet?text=${this.description}&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
+              this.elems['a-share-twitter'].setAttribute('href', `https://twitter.com/intent/tweet?text=${this.description}&hashtags=TheComingTogether&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
               this.elems['loading-page'].style.display = 'none';
               this.elems['share-page'].style.display = 'none';
               this.elems['end-page'].style.display = 'flex';
