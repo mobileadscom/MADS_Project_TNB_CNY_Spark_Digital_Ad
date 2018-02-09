@@ -65,10 +65,10 @@ class AdUnit extends Mads {
         <div id="video-page" class="video-show"><div class="video-container"><button id="skip-video">Send A Greeting</button><div id="video-frame"></div></div></div>
         <div id="game-page" class="game-show">
             <div id="game-initial">
-              <h1>FASSSSTTEERRRR!!!</h1>
-              <h2>Pick up 10 items before the rotan comes!</h2>
-              <h2 class="collect">Collect all 10 and there will be a <br><span style="color:yellow;">SPECIAL SURPRISE</span> for you at the very end!</h2>
-              <button class="start-now" id="btn-start-game">START NOW</button>
+              <h1>HURRY!</h1>
+              <h2>Find 10 items before the ah ma's feather duster comes!</h2>
+              <h2 class="collect">Find all 10 items and there will be a <br><span style="color:yellow;">SPECIAL SURPRISE</span> for you at the end!</h2>
+              <button class="start-now" id="btn-start-game">FIND NOW</button>
             </div>
         </div>
         <div class="game" id="gameContainer" >
@@ -195,7 +195,7 @@ class AdUnit extends Mads {
       </div>
       <div id="sharing-intro-page" style="display:none;" class="sharing-intro-show">
           <div class="sharing-left">
-            <h1>Chinese New Year becomes brighter when we are all in it together <small>Personalise your own greeting in 3 steps this Lunar New Year</small></h1>
+            <h1>Chinese New Year becomes brighter when we are all in it together <small>Personalise your own greeting and share with friends in 3 simple steps!</small></h1>
             <div class="sharing-icons">
                 <div class="camera">
                     <img src="img/icon-camera.svg" alt="">
