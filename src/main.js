@@ -59,7 +59,7 @@ class AdUnit extends Mads {
       </div>
       <div id="start">
         <div id="desktop-side">
-          <img src="img/the-coming-together.svg" id="desktop-logo" alt="">
+          <img src="img/the-coming-together2.svg" id="desktop-logo" alt="">
           <img src="img/tenaga-nasional-logo.svg" alt="">
         </div>
         <div id="video-page" class="video-show"><div class="video-container"><button id="skip-video">Send A Greeting</button><div id="video-frame"></div></div></div>
