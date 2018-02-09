@@ -276,7 +276,7 @@ class AdUnit extends Mads {
       </div>
       <div id="end-page" style="display:none;">
         <div class="left-end">
-            <img src="img/the-coming-together.svg" alt="">
+            <img src="img/the-coming-together2.svg" alt="" style="padding-bottom:30px;">
             <img src="img/tenaga-nasional-logo.svg" alt="">
         </div>
         <div class="right-end">
