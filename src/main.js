@@ -332,6 +332,7 @@ class AdUnit extends Mads {
           rel: 0,
           enablejsapi: 1,
           modestbranding: 1,
+          fs:0
         },
         tracker: (...args) => {
           console.log('tracker', args);

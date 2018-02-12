@@ -495,7 +495,7 @@ h1, h2 {
 #slider .slick-slide.slick-center:before {
     content: ' ';
     height: 100%;
-    width: 95%;
+    width: 80%;
     position: absolute;
     background-size: contain;
     background-repeat: no-repeat;
