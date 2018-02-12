@@ -1015,7 +1015,8 @@ class AdUnit extends Mads {
           };
         });
       }
-      this.video.player.pauseVideo();
+      this.tracker('E', 'skip_video');
+      this.video.player.stopVideo();
       fadeOutIn(this.elems.start, this.sharingIntroPage, { display: 'flex' });
     });
   }
