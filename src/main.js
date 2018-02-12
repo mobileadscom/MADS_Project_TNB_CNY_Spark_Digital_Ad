@@ -467,8 +467,8 @@ class AdUnit extends Mads {
         this.cHeight = this.elems['upload-canvas'].offsetHeight;
         this.elems['upload-canvas'].width = this.cWidth;
         this.elems['upload-canvas'].height = this.cHeight;
-        this.ctx.translate(this.cWidth, 0);
-        this.ctx.scale(-1, 1);
+        // this.ctx.translate(this.cWidth, 0);
+        // this.ctx.scale(-1, 1);
         const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
         this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
       }, 1000);
@@ -680,6 +680,7 @@ class AdUnit extends Mads {
                 greetingImg.className = 'greetingImg';
                 greetingImg.onload = () => {
                   this.elems.workspace.appendChild(greetingImg);
+                  this.elems['loading-page'].style.display = 'none';
                   html2canvas(this.elems.workspace).then((c) => {
                     callback(null, { result: trim(c).toDataURL('image/png') });
                   });
@@ -724,6 +725,7 @@ class AdUnit extends Mads {
             this.elems.workspace.innerHTML = '';
             const bg5 = new window.Image();
             bg5.className = 'bg5';
+            // bg5.style.opacity = '0.5';
             bg5.onload = () => {
               this.camerashotEl.id = 'camerashot5';
               this.elems.workspace.appendChild(bg5);
@@ -737,103 +739,104 @@ class AdUnit extends Mads {
             callback(err);
           }
         },
-        gif4: (callback) => {
-          try {
-            this.elems.workspace.style.backgroundImage = 'none';
-            this.elems.workspace.innerHTML = '';
-            const bg4 = new window.Image();
-            // bg4.style.opacity = '0.5';
-            bg4.className = 'bg4';
-            bg4.onload = () => {
-              this.camerashotEl.id = 'camerashot4';
-              this.elems.workspace.appendChild(bg4);
-              this.elems.workspace.appendChild(this.camerashotEl);
-              html2canvas(this.elems.workspace).then((c) => {
-                callback(null, { result: trim(c).toDataURL('image/png') });
-              });
-            };
-            bg4.src = this.resolve('img/Asset-4.png');
-          } catch (err) {
-            callback(err);
-          }
-        },
-        gif3: (callback) => {
-          try {
-            this.elems.workspace.style.backgroundImage = 'none';
-            this.elems.workspace.innerHTML = '';
-            const bg3 = new window.Image();
-            // bg3.style.opacity = '0.5';
-            bg3.className = 'bg3';
-            bg3.onload = () => {
-              this.camerashotEl.id = 'camerashot3';
-              this.elems.workspace.appendChild(bg3);
-              this.elems.workspace.appendChild(this.camerashotEl);
-              html2canvas(this.elems.workspace).then((c) => {
-                // console.log(c);
-                callback(null, { result: trim(c).toDataURL('image/png') });
-              });
-            };
-            bg3.src = this.resolve('img/Asset-3.png');
-          } catch (err) {
-            callback(err);
-          }
-        },
-        gif2: (callback) => {
-          try {
-            this.elems.workspace.style.backgroundImage = 'none';
-            this.elems.workspace.innerHTML = '';
-            const bg2 = new window.Image();
-            // bg2.style.opacity = '0.5';
-            bg2.className = 'bg2';
-            bg2.onload = () => {
-              this.camerashotEl.id = 'camerashot2';
-              this.elems.workspace.appendChild(bg2);
-              this.elems.workspace.appendChild(this.camerashotEl);
-              html2canvas(this.elems.workspace).then((c) => {
-                callback(null, { result: trim(c).toDataURL('image/png') });
-              });
-            };
-            bg2.src = this.resolve('img/Asset-2.png');
-          } catch (err) {
-            callback(err);
-          }
-        },
-        gif1: (callback) => {
-          try {
-            this.elems.workspace.style.backgroundImage = 'none';
-            this.elems.workspace.innerHTML = '';
-            const bg1 = new window.Image();
-            // bg1.style.opacity = '0.5';
-            bg1.className = 'bg1';
-            bg1.onload = () => {
-              this.camerashotEl.id = 'camerashot1';
-              this.elems.workspace.appendChild(bg1);
-              this.elems.workspace.appendChild(this.camerashotEl);
-              html2canvas(this.elems.workspace).then((c) => {
-                // console.log(c);
-                callback(null, { result: trim(c).toDataURL('image/png') });
-              });
-            };
-            bg1.src = this.resolve('img/Asset-1.png');
-          } catch (err) {
-            callback(err);
-          }
-        },
+        // gif4: (callback) => {
+        //   try {
+        //     this.elems.workspace.style.backgroundImage = 'none';
+        //     this.elems.workspace.innerHTML = '';
+        //     const bg4 = new window.Image();
+        //     // bg4.style.opacity = '0.5';
+        //     bg4.className = 'bg4';
+        //     bg4.onload = () => {
+        //       this.camerashotEl.id = 'camerashot4';
+        //       this.elems.workspace.appendChild(bg4);
+        //       this.elems.workspace.appendChild(this.camerashotEl);
+        //       html2canvas(this.elems.workspace).then((c) => {
+        //         callback(null, { result: trim(c).toDataURL('image/png') });
+        //       });
+        //     };
+        //     bg4.src = this.resolve('img/Asset-4.png');
+        //   } catch (err) {
+        //     callback(err);
+        //   }
+        // },
+        // gif3: (callback) => {
+        //   try {
+        //     this.elems.workspace.style.backgroundImage = 'none';
+        //     this.elems.workspace.innerHTML = '';
+        //     const bg3 = new window.Image();
+        //     // bg3.style.opacity = '0.5';
+        //     bg3.className = 'bg3';
+        //     bg3.onload = () => {
+        //       this.camerashotEl.id = 'camerashot3';
+        //       this.elems.workspace.appendChild(bg3);
+        //       this.elems.workspace.appendChild(this.camerashotEl);
+        //       html2canvas(this.elems.workspace).then((c) => {
+        //         // console.log(c);
+        //         callback(null, { result: trim(c).toDataURL('image/png') });
+        //       });
+        //     };
+        //     bg3.src = this.resolve('img/Asset-3.png');
+        //   } catch (err) {
+        //     callback(err);
+        //   }
+        // },
+        // gif2: (callback) => {
+        //   try {
+        //     this.elems.workspace.style.backgroundImage = 'none';
+        //     this.elems.workspace.innerHTML = '';
+        //     const bg2 = new window.Image();
+        //     // bg2.style.opacity = '0.5';
+        //     bg2.className = 'bg2';
+        //     bg2.onload = () => {
+        //       this.camerashotEl.id = 'camerashot2';
+        //       this.elems.workspace.appendChild(bg2);
+        //       this.elems.workspace.appendChild(this.camerashotEl);
+        //       html2canvas(this.elems.workspace).then((c) => {
+        //         callback(null, { result: trim(c).toDataURL('image/png') });
+        //       });
+        //     };
+        //     bg2.src = this.resolve('img/Asset-2.png');
+        //   } catch (err) {
+        //     callback(err);
+        //   }
+        // },
+        // gif1: (callback) => {
+        //   try {
+        //     this.elems.workspace.style.backgroundImage = 'none';
+        //     this.elems.workspace.innerHTML = '';
+        //     const bg1 = new window.Image();
+        //     // bg1.style.opacity = '0.5';
+        //     bg1.className = 'bg1';
+        //     bg1.onload = () => {
+        //       this.camerashotEl.id = 'camerashot1';
+        //       this.elems.workspace.appendChild(bg1);
+        //       this.elems.workspace.appendChild(this.camerashotEl);
+        //       html2canvas(this.elems.workspace).then((c) => {
+        //         // console.log(c);
+        //         callback(null, { result: trim(c).toDataURL('image/png') });
+        //       });
+        //     };
+        //     bg1.src = this.resolve('img/Asset-1.png');
+        //   } catch (err) {
+        //     callback(err);
+        //   }
+        // },
       }, (err, { gif8, gif7, gif6, gif5, gif4, gif3, gif2, gif1 }) => {
         console.log(err);
 
         this.loadJS(this.resolve('js/gif.js')).then(() => {
           const gif = new GIF({ // eslint-disable-line
-            workers: 8,
+            workers: 15,
             quality: 10,
             workerScript: this.resolve('js/gif.worker.js'),
           });
-          [gif1, gif2, gif3, gif4, gif5, gif6, gif7, gif8].forEach((img, index) => {
+          // [gif1, gif2, gif3, gif4, gif5, gif6, gif7, gif8]
+            [gif5, gif6, gif7, gif8].forEach((img, index) => {
             const i = new window.Image();
             i.onload = () => {
               gif.addFrame(i);
               console.log(index);
-              if (index === 7) {
+              if (index === 3) {
                 gif.render();
               }
             };
@@ -910,7 +913,7 @@ class AdUnit extends Mads {
         this.elems['upload-canvas'].width = this.cWidth;
         this.elems['upload-canvas'].height = this.cHeight;
         this.ctx.translate(this.cWidth, 0);
-        this.ctx.scale(-1, 1);
+        // this.ctx.scale(-1, 1);
         const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
         this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
       }, 1000);
@@ -986,10 +989,10 @@ class AdUnit extends Mads {
             this.zp = document.getElementById('zp-img');
             this.zm = document.getElementById('zm-img');
             const v = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
-            this.ctx.scale(-1, 1);
-            v.x = -this.cWidth;
+            // this.ctx.scale(-1, 1);
+            // v.x = -this.cWidth;
             this.ctx.drawImage(image, v.x, v.y, v.width, v.height);
-            this.ctx.scale(-1, 1);
+            // this.ctx.scale(-1, 1);
             const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
             this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
 
@@ -1005,9 +1008,9 @@ class AdUnit extends Mads {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
               v.x = this.touchX - this.offsetX;
               v.y = this.touchY - this.offsetY;
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             };
 
@@ -1055,9 +1058,9 @@ class AdUnit extends Mads {
             this.rt.addEventListener('click', () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
               this.rotation += 30;
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.drawRotatedimage(image,  (v.x + v.width / 2), v.y + v.height / 2, this.rotation,  -v.width / 2, -v.height / 2, v.width, v.height);
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             });
             
@@ -1067,9 +1070,9 @@ class AdUnit extends Mads {
               v.height += this.zoom;
               v.x -= this.zoom / 2;
               v.y -= this.zoom / 2;
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             });
 
@@ -1079,9 +1082,9 @@ class AdUnit extends Mads {
               v.height -= this.zoom;
               v.x += this.zoom / 2;
               v.y += this.zoom / 2;
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             });
             // this.activeRegion = ZingTouch.Region(this.elems['upload-page']);
@@ -1097,10 +1100,10 @@ class AdUnit extends Mads {
 
             this.elems['btn-upload-next'].addEventListener('click', () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-              this.ctx.scale(-1, 1);
+              // this.ctx.scale(-1, 1);
               this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
-              this.ctx.scale(-1, 1);
-              this.camerashot = this.elems['upload-canvas'].toDataURL('image/png');
+              // this.ctx.scale(-1, 1);
+              this.camerashot = trim(this.elems['upload-canvas']).toDataURL('image/png');
               this.uploadNext();
             });
 

@@ -391,6 +391,7 @@ h1, h2 {
     position: absolute;
     width: 138px;
     z-index: -100;
+    transform-origin: center;
 }
 
 #camerashot6 {
@@ -400,8 +401,8 @@ h1, h2 {
 }
 
 #camerashot5 {
-    left: 184px;
-    top: 174px;
+    left: 188px;
+    top: 170px;
     transform: rotate(-14deg);
 }
 
@@ -486,11 +487,9 @@ h1, h2 {
 }
 
 #slider .slick-slide.slick-center img {
-    height: 100px;
+    width: 1em;
     align-self: center;
 }
-
-
 
 #slider .slick-slide.slick-center:before {
     content: ' ';
@@ -560,7 +559,7 @@ h1, h2 {
 
 @media (min-width: 768px) {
     #slider .slick-slide.slick-center img {
-        height: 30%;
+        width: 1em;
     }
     #slider .slick-slide {
         transform: scale(0.9);
