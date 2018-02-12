@@ -639,6 +639,13 @@ h1, h2 {
     }
 }
 
+@media (min-width: 1240px) {
+
+    #slider .slick-slide.slick-center:before {
+        width: 300px;
+    }
+}
+
 .first-greeting-text, .second-greeting-text {
     position: absolute;
     top: 0px;
