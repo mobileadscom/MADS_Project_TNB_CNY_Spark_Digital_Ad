@@ -497,6 +497,7 @@ class AdUnit extends Mads {
 
     this.uploadNext = () => {
       this.elems['loading-page'].style.display = 'flex';
+      this.elems['progressbar'].style.display = 'none';
       setTimeout(() => {
         fadeOutIn(this.elems['upload-page'], this.elems['greeting-page'], { display: 'block' });
         if (this.withCamera) {
@@ -592,7 +593,7 @@ class AdUnit extends Mads {
       const xhr = new window.XMLHttpRequest();
       xhr.addEventListener('readystatechange', () => {
         if (xhr.readyState === 4) {
-          const htmlGIFUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/image.gif`;
+          const htmlGIFUri = `http://share.thecomingtogether.com.my/4220/custom/tnb_cny/uploads/${timeNow}/image.gif`;
           const siteUri = 'https://tnb.com.my';
 
           const htmlToShare = `<!doctype html>
@@ -614,14 +615,14 @@ class AdUnit extends Mads {
               
                   <meta name="DC.title" content="${this.title}">
               
-                  <meta name="twitter:card" content="player">
-                  <meta name="twitter:url" content="${htmlGIFUri}">
-                  <meta name="twitter:site" content="@Tenaga_Nasional">
-                  <meta name="twitter:title" content="${this.title}">
-                  <meta name="twitter:description" content="${htmlGIFUri}">
-                  <meta name="twitter:creator" content="@Tenaga_Nasional">
-                  <meta name="twitter:image" content="${htmlGIFUri}">
-                  <meta name="twitter:domain" content="tnb.com.my">
+                  <meta property="twitter:card" content="player">
+                  <meta property="twitter:url" content="${htmlGIFUri}">
+                  <meta property="twitter:site" content="@Tenaga_Nasional">
+                  <meta property="twitter:title" content="${this.title}">
+                  <meta property="twitter:description" content="${htmlGIFUri}">
+                  <meta property="twitter:creator" content="@Tenaga_Nasional">
+                  <meta property="twitter:image" content="${htmlGIFUri}">
+                  <meta property="twitter:domain" content="tnb.com.my">
                   <title>${this.title}</title>
               </head>
 
@@ -643,7 +644,7 @@ class AdUnit extends Mads {
           const htmlXhr = new window.XMLHttpRequest();
           htmlXhr.addEventListener('readystatechange', () => {
             if (htmlXhr.readyState === 4) {
-              const htmlUri = `https://rmarepo.richmediaads.com/4220/custom/tnb_cny/uploads/${timeNow}/index.html`;
+              const htmlUri = `http://share.thecomingtogether.com.my/4220/custom/tnb_cny/uploads/${timeNow}/index.html`;
               this.elems['a-share-fb'].setAttribute('href', `https://www.facebook.com/sharer/sharer.php?u=${htmlUri}`);
               console.log(this.elems['a-share-twitter']);
               this.elems['a-share-twitter'].setAttribute('href', `https://twitter.com/intent/tweet?text=${this.description}&hashtags=TheComingTogether&original_referrer=${siteUri}&url=${htmlUri}&tw_p=tweetbutton&via=Tenaga_Nasional`);
@@ -666,6 +667,7 @@ class AdUnit extends Mads {
     this.elems['btn-greeting-next'].addEventListener('mousedown', () => {
       this.tracker('E', 'finish_greeting');
       this.elems['loading-page'].style.display = 'flex';
+      this.elems['progressbar'].style.display = 'block';
       series({
         gif8: (callback) => {
           try {
@@ -913,7 +915,7 @@ class AdUnit extends Mads {
         this.cHeight = this.elems['upload-canvas'].offsetHeight;
         this.elems['upload-canvas'].width = this.cWidth;
         this.elems['upload-canvas'].height = this.cHeight;
-        this.ctx.translate(this.cWidth, 0);
+        // this.ctx.translate(this.cWidth, 0);
         // this.ctx.scale(-1, 1);
         const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
         this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
@@ -978,6 +980,7 @@ class AdUnit extends Mads {
         reader.onload = (e) => {
           const image = new window.Image();
           image.onload = () => {
+            this.image = image;
             this.rect = this.elems['upload-canvas'].getBoundingClientRect();
             this.touchX = 0;
             this.touchY = 0;
@@ -1010,84 +1013,90 @@ class AdUnit extends Mads {
               v.x = this.touchX - this.offsetX;
               v.y = this.touchY - this.offsetY;
               // this.ctx.scale(-1, 1);
-              this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
+              this.drawRotatedimage(this.image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
               // this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             };
-
-            this.elems['upload-canvas'].addEventListener('mousedown', (ev) => {
-              this.touchX = ev.clientX - this.rect.left;
-              this.touchY = ev.clientY - this.rect.top;
-              this.offsetX = this.touchX - v.x;
-              this.offsetY = this.touchY - v.y;
-              this.onDrag = true;
-            });
-
-            this.elems['upload-canvas'].addEventListener('touchstart', (ev) => {
-              this.touchX = ev.touches[0].clientX - this.rect.left;
-              this.touchY = ev.touches[0].clientY - this.rect.top;
-              this.offsetX = this.touchX - v.x;
-              this.offsetY = this.touchY - v.y;
-              this.onDrag = true;
-            });
-
-            this.elems['upload-canvas'].addEventListener('mousemove', (ev) => {
-              if (this.onDrag) {
+            
+            if (!this.addedEvent) {
+              this.elems['upload-canvas'].addEventListener('mousedown', (ev) => {
                 this.touchX = ev.clientX - this.rect.left;
                 this.touchY = ev.clientY - this.rect.top;
-                this.moveFace();
-              }
-            });
+                this.offsetX = this.touchX - v.x;
+                this.offsetY = this.touchY - v.y;
+                this.onDrag = true;
+              });
 
-            this.elems['upload-canvas'].addEventListener('touchmove', (ev) => {
-              if (this.onDrag) {
-                e.preventDefault();
+              this.elems['upload-canvas'].addEventListener('touchstart', (ev) => {
                 this.touchX = ev.touches[0].clientX - this.rect.left;
                 this.touchY = ev.touches[0].clientY - this.rect.top;
-                this.moveFace();
-              }
-            });
+                this.offsetX = this.touchX - v.x;
+                this.offsetY = this.touchY - v.y;
+                this.onDrag = true;
+              });
 
-            this.elems['upload-canvas'].addEventListener('mouseup', () => {
-              this.onDrag = false;
-            });
+              this.elems['upload-canvas'].addEventListener('mousemove', (ev) => {
+                if (this.onDrag) {
+                  this.touchX = ev.clientX - this.rect.left;
+                  this.touchY = ev.clientY - this.rect.top;
+                  this.moveFace();
+                }
+              });
 
-            this.elems['upload-canvas'].addEventListener('touchend', () => {
-              this.onDrag = false;
-            });
+              this.elems['upload-canvas'].addEventListener('touchmove', (ev) => {
+                if (this.onDrag) {
+                  e.preventDefault();
+                  this.touchX = ev.touches[0].clientX - this.rect.left;
+                  this.touchY = ev.touches[0].clientY - this.rect.top;
+                  this.moveFace();
+                }
+              });
 
-            this.rt.addEventListener('click', () => {
-              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-              this.rotation += 30;
-              // this.ctx.scale(-1, 1);
-              this.drawRotatedimage(image,  (v.x + v.width / 2), v.y + v.height / 2, this.rotation,  -v.width / 2, -v.height / 2, v.width, v.height);
-              // this.ctx.scale(-1, 1);
-              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
-            });
-            
-            this.zp.addEventListener('click', () => {
-              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-              v.width += this.zoom;
-              v.height += this.zoom;
-              v.x -= this.zoom / 2;
-              v.y -= this.zoom / 2;
-              // this.ctx.scale(-1, 1);
-              this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
-              // this.ctx.scale(-1, 1);
-              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
-            });
+              this.elems['upload-canvas'].addEventListener('mouseup', () => {
+                this.onDrag = false;
+              });
 
-            this.zm.addEventListener('click', () => {
-              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight); 
-              v.width -= this.zoom;
-              v.height -= this.zoom;
-              v.x += this.zoom / 2;
-              v.y += this.zoom / 2;
-              // this.ctx.scale(-1, 1);
-              this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
-              // this.ctx.scale(-1, 1);
-              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
-            });
+              this.elems['upload-canvas'].addEventListener('touchend', () => {
+                this.onDrag = false;
+              });
+
+              this.rt.addEventListener('click', () => {
+                this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+                this.rotation += 30;
+                // this.ctx.scale(-1, 1);
+                this.drawRotatedimage(this.image,  (v.x + v.width / 2), v.y + v.height / 2, this.rotation,  -v.width / 2, -v.height / 2, v.width, v.height);
+                // this.ctx.scale(-1, 1);
+                this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+              });
+              
+              this.zp.addEventListener('click', () => {
+                this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+                v.width += this.zoom;
+                v.height += this.zoom;
+                v.x -= this.zoom / 2;
+                v.y -= this.zoom / 2;
+                // this.ctx.scale(-1, 1);
+                this.drawRotatedimage(this.image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
+                // this.ctx.scale(-1, 1);
+                this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+              });
+
+              this.zm.addEventListener('click', () => {
+                this.ctx.clearRect(0, 0, this.cWidth, this.cHeight); 
+                v.width -= this.zoom;
+                v.height -= this.zoom;
+                v.x += this.zoom / 2;
+                v.y += this.zoom / 2;
+                // this.ctx.scale(-1, 1);
+                this.drawRotatedimage(this.image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
+                // this.ctx.scale(-1, 1);
+                this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+              });
+              this.addedEvent = true;
+            }
+            else {
+              console.log('added');
+            }
             // this.activeRegion = ZingTouch.Region(this.elems['upload-page']);
 
             // this.activeRegion.bind(this.elems['upload-canvas'], 'pan', (x) => {

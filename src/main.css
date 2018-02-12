@@ -690,6 +690,7 @@ h1, h2 {
     bottom: 10%;
     left: 50%;
     transform: translateX(-50%);
+    display: none;
 }
 
 #progress {
@@ -698,10 +699,10 @@ h1, h2 {
     width: 0%;
     max-width: 100%;
     float: left;
-    -webkit-animation: progress 20s 1 forwards;
-    -moz-animation: progress 20s 1 forwards;
-    -ms-animation: progress 20s 1 forwards;
-    animation: progress 20s 1 forwards;
+    -webkit-animation: progress 25s 1 forwards;
+    -moz-animation: progress 25s 1 forwards;
+    -ms-animation: progress 25s 1 forwards;
+    animation: progress 25s 1 forwards;
 }
 
 #pbaranim {
