@@ -382,7 +382,7 @@ class AdUnit extends Mads {
     return [...links, `
       @font-face {
         font-family: MyriadPro;
-        src: url(src/fonts/MyriadPro-Regular.otf);
+        src: url(fonts/MyriadPro-Regular.otf);
       }
       html, body, button {
         font-family: 'MyriadPro', sans-serif;
@@ -1006,13 +1006,13 @@ class AdUnit extends Mads {
             };
             this.moveFace = () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
               v.x = this.touchX - this.offsetX;
               v.y = this.touchY - this.offsetY;
               this.ctx.scale(-1, 1);
               // this.ctx.drawImage(image, v.x, v.y, v.width, v.height);
               this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
               this.ctx.scale(-1, 1);
+              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             };
 
             console.log(this.elems['upload-canvas']);
@@ -1070,7 +1070,6 @@ class AdUnit extends Mads {
             
             this.zp.addEventListener('click', () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
               v.width += this.zoom;
               v.height += this.zoom;
               v.x -= this.zoom / 2;
@@ -1078,11 +1077,11 @@ class AdUnit extends Mads {
               this.ctx.scale(-1, 1);
               this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
               this.ctx.scale(-1, 1);
+              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             });
 
             this.zm.addEventListener('click', () => {
-              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight); 
               v.width -= this.zoom;
               v.height -= this.zoom;
               v.x += this.zoom / 2;
@@ -1090,6 +1089,7 @@ class AdUnit extends Mads {
               this.ctx.scale(-1, 1);
               this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
               this.ctx.scale(-1, 1);
+              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             });
             // this.activeRegion = ZingTouch.Region(this.elems['upload-page']);
 
