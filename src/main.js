@@ -376,6 +376,13 @@ class AdUnit extends Mads {
     const links = [];
 
     return [...links, `
+      @font-face {
+        font-family: MyriadPro;
+        src: url(src/fonts/MyriadPro-Regular.otf);
+      }
+      html, body, button {
+        font-family: 'MyriadPro', sans-serif;
+      }
       body, .portrait-show, #loading-page, #end-page {
         /* background: url(${this.resolve('img/bg1.png')}); */
         background-color: #e43222;
