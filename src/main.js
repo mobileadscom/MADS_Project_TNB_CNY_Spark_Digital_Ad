@@ -222,6 +222,7 @@ class AdUnit extends Mads {
         <div id="upload-page" class="upload-show">
             <h1><small>STEP 1</small>PICK A PICTURE FOR SPARKY'S HEAD</h1>
             <div class="img-tools">
+              <img id="rt-img" src="img/rotate.png" />
               <img id="zp-img" src="img/zoom_plus.png" />
               <img id="zm-img" src="img/zoom_minus.png" />
             </div>
@@ -980,8 +981,7 @@ class AdUnit extends Mads {
             this.onDrag = false;
             this.rotation = 0;
             this.zoom = this.cWidth * 0.15;
-            console.log(this.zoom);
-            // this.rt = document.getElementById('rt-img');
+            this.rt = document.getElementById('rt-img');
             this.zp = document.getElementById('zp-img');
             this.zm = document.getElementById('zm-img');
             const v = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
@@ -993,13 +993,9 @@ class AdUnit extends Mads {
             this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
 
             console.log('should write new face');
-            console.log(v);
             this.drawRotatedimage = (dimage, midX, midY, angle, x, y, width, height) => {
               this.ctx.save();
               this.ctx.translate(midX, midY);
-              // this.ctx.strokeStyle = "blue";
-              // this.ctx.rect(midX, midY, 5, 5);
-              // this.ctx.stroke();
               this.ctx.rotate(angle * Math.PI / 180);
               this.ctx.drawImage(dimage, x, y, width, height);
               this.ctx.restore();
@@ -1009,13 +1005,11 @@ class AdUnit extends Mads {
               v.x = this.touchX - this.offsetX;
               v.y = this.touchY - this.offsetY;
               this.ctx.scale(-1, 1);
-              // this.ctx.drawImage(image, v.x, v.y, v.width, v.height);
-              this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
+              this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
               this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             };
 
-            console.log(this.elems['upload-canvas']);
             this.elems['upload-canvas'].addEventListener('mousedown', (ev) => {
               this.touchX = ev.clientX - this.rect.left;
               this.touchY = ev.clientY - this.rect.top;
@@ -1057,16 +1051,14 @@ class AdUnit extends Mads {
               this.onDrag = false;
             });
 
-            // this.rt.addEventListener('click', () => {
-            //   this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-            //   this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
-            //   this.rotation += 30;
-            //   console.log(this.rotation);
-            //   console.log(-(v.x - v.width / 2), v.y + v.height / 2);
-            //   this.ctx.scale(-1, 1);
-            //   this.drawRotatedimage(image,  -(v.x + v.width / 2), v.y + v.height / 2, this.rotation, 0, 0, v.width, v.height);
-            //   this.ctx.scale(-1, 1);
-            // });
+            this.rt.addEventListener('click', () => {
+              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+              this.rotation += 30;
+              this.ctx.scale(-1, 1);
+              this.drawRotatedimage(image,  (v.x + v.width / 2), v.y + v.height / 2, this.rotation,  -v.width / 2, -v.height / 2, v.width, v.height);
+              this.ctx.scale(-1, 1);
+              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+            });
             
             this.zp.addEventListener('click', () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
@@ -1075,7 +1067,7 @@ class AdUnit extends Mads {
               v.x -= this.zoom / 2;
               v.y -= this.zoom / 2;
               this.ctx.scale(-1, 1);
-              this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
+              this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
               this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             });
@@ -1087,7 +1079,7 @@ class AdUnit extends Mads {
               v.x += this.zoom / 2;
               v.y += this.zoom / 2;
               this.ctx.scale(-1, 1);
-              this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
+              this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
               this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             });
@@ -1105,7 +1097,7 @@ class AdUnit extends Mads {
             this.elems['btn-upload-next'].addEventListener('click', () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
               this.ctx.scale(-1, 1);
-              this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
+              this.drawRotatedimage(image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
               this.ctx.scale(-1, 1);
               this.camerashot = this.elems['upload-canvas'].toDataURL('image/png');
               this.uploadNext();
