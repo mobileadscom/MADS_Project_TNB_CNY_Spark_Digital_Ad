@@ -225,9 +225,8 @@ class AdUnit extends Mads {
             <video id="upload-video" style="display:none;"></video>
             <div class="sharing-actions">
                 <div id="uploading">
-                  <button class="start-now invert" id="btn-turn-on-camera">TURN ON CAMERA</button>
                   <div class="wrapper-gallery-upload">
-                    <button class="start-now invert" id="btn-gallery-upload">UPLOAD PHOTO</button>
+                    <button class="start-now invert" id="btn-gallery-upload">Snap A Picture / Upload Photo</button>
                     <input type="file" id="input-gallery-file" name="gallery-file" />
                   </div>
                   <!--<button class="start-now invert" id="btn-gallery-upload">GALLERY UPLOAD</button>-->
@@ -468,25 +467,25 @@ class AdUnit extends Mads {
       }, 1000);
     });
 
-    this.elems['btn-turn-on-camera'].addEventListener('mousedown', () => {
-      if (window.navigator.mediaDevices) {
-        window.navigator.mediaDevices.getUserMedia({
-          video: {
-            width: this.elems['upload-canvas'].offsetWidth,
-            height: this.elems['upload-canvas'].offsetHeight,
-          },
-        }).then((stream) => {
-          this.elems['upload-video'].src = window.URL.createObjectURL(stream);
-          this.elems['upload-video'].play();
-          this.withCamera = true;
-          this.stopVideo = () => {
-            stream.getTracks()[0].stop();
-          };
-        }).catch((err) => {
-          console.error(err);
-        });
-      }
-    });
+    // this.elems['btn-turn-on-camera'].addEventListener('mousedown', () => {
+    //   if (window.navigator.mediaDevices) {
+    //     window.navigator.mediaDevices.getUserMedia({
+    //       video: {
+    //         width: this.elems['upload-canvas'].offsetWidth,
+    //         height: this.elems['upload-canvas'].offsetHeight,
+    //       },
+    //     }).then((stream) => {
+    //       this.elems['upload-video'].src = window.URL.createObjectURL(stream);
+    //       this.elems['upload-video'].play();
+    //       this.withCamera = true;
+    //       this.stopVideo = () => {
+    //         stream.getTracks()[0].stop();
+    //       };
+    //     }).catch((err) => {
+    //       console.error(err);
+    //     });
+    //   }
+    // });
 
     this.uploadNext = () => {
       this.elems['loading-page'].style.display = 'flex';
