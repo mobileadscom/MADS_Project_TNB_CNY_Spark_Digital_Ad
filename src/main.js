@@ -67,7 +67,7 @@ class AdUnit extends Mads {
         <div id="game-page" class="game-show">
             <div id="game-initial">
               <h1>HURRY!</h1>
-              <h2>Find 10 items before the ah ma's feather duster comes!</h2>
+              <h2>Find 10 items before the Ah Ma's feather duster comes!</h2>
               <h2 class="collect">Find all 10 items and there will be a <br><span style="color:yellow;">SPECIAL SURPRISE</span> for you at the end!</h2>
               <button class="start-now" id="btn-start-game">FIND NOW</button>
             </div>
@@ -981,6 +981,7 @@ class AdUnit extends Mads {
             this.rotation = 0;
             this.zoom = this.cWidth * 0.15;
             console.log(this.zoom);
+            // this.rt = document.getElementById('rt-img');
             this.zp = document.getElementById('zp-img');
             this.zm = document.getElementById('zm-img');
             const v = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
@@ -996,6 +997,9 @@ class AdUnit extends Mads {
             this.drawRotatedimage = (dimage, midX, midY, angle, x, y, width, height) => {
               this.ctx.save();
               this.ctx.translate(midX, midY);
+              // this.ctx.strokeStyle = "blue";
+              // this.ctx.rect(midX, midY, 5, 5);
+              // this.ctx.stroke();
               this.ctx.rotate(angle * Math.PI / 180);
               this.ctx.drawImage(dimage, x, y, width, height);
               this.ctx.restore();
@@ -1052,6 +1056,17 @@ class AdUnit extends Mads {
             this.elems['upload-canvas'].addEventListener('touchend', () => {
               this.onDrag = false;
             });
+
+            // this.rt.addEventListener('click', () => {
+            //   this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+            //   this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+            //   this.rotation += 30;
+            //   console.log(this.rotation);
+            //   console.log(-(v.x - v.width / 2), v.y + v.height / 2);
+            //   this.ctx.scale(-1, 1);
+            //   this.drawRotatedimage(image,  -(v.x + v.width / 2), v.y + v.height / 2, this.rotation, 0, 0, v.width, v.height);
+            //   this.ctx.scale(-1, 1);
+            // });
             
             this.zp.addEventListener('click', () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
