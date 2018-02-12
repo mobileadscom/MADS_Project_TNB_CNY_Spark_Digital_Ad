@@ -674,3 +674,62 @@ h1, h2 {
 .img-tools img {
     padding: 5px;
 }
+
+#progressbar {
+    height: 15px;
+    background-color: #9F2318;
+    padding: 2px;
+    border: 2px white double;
+    clear: both;
+    width: 70%;
+    margin: auto;
+    border-radius: 3px;
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#progress {
+    background: #E43222; /*-- Color of the bar --*/
+    height: 15px;
+    width: 0%;
+    max-width: 100%;
+    float: left;
+    -webkit-animation: progress 20s 1 forwards;
+    -moz-animation: progress 20s 1 forwards;
+    -ms-animation: progress 20s 1 forwards;
+    animation: progress 20s 1 forwards;
+}
+
+#pbaranim {
+    height: 15px;
+    width: 100%;
+    overflow: hidden;
+    background: url('http://www.cssdeck.com/uploads/media/items/7/7uo1osj.gif') repeat-x;
+    opacity: 0.25;
+}
+
+@-webkit-keyframes progress { 
+    from { }
+
+    to { width: 100% }
+}
+
+@-moz-keyframes progress { 
+    from { }
+
+    to { width: 100% }
+}
+
+@-ms-keyframes progress { 
+    from { }
+
+    to { width: 100% }
+}
+
+@keyframes progress { 
+    from { }
+
+    to { width: 100% }
+}
