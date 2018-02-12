@@ -1104,8 +1104,9 @@ class AdUnit extends Mads {
 
             this.elems['btn-upload-next'].addEventListener('click', () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-              this.ctx.drawImage(image, this.dragX,
-                this.dragY, v.width, v.height);
+              this.ctx.scale(-1, 1);
+              this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
+              this.ctx.scale(-1, 1);
               this.camerashot = this.elems['upload-canvas'].toDataURL('image/png');
               this.uploadNext();
             });
