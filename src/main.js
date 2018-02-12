@@ -1,5 +1,6 @@
 /* global window, document, $, require */
 /* eslint-disable global-require */
+/* eslint-disable */
 import Mads, { fadeOutIn } from 'mads-custom';
 import { contain } from 'intrinsic-scale';
 import html2canvas from 'html2canvas';
@@ -220,6 +221,10 @@ class AdUnit extends Mads {
       <div id="sharing-page" class="sharing-show" style="display:none;">
         <div id="upload-page" class="upload-show">
             <h1><small>STEP 1</small>PICK A PICTURE FOR SPARKY'S HEAD</h1>
+            <div class="img-tools">
+              <img id="zp-img" src="img/zoom_plus.png" />
+              <img id="zm-img" src="img/zoom_minus.png" />
+            </div>
             <canvas id="upload-canvas"></canvas>
             <img src="img/dragon-face.png" id="dragon-face" alt="">
             <video id="upload-video" style="display:none;"></video>
@@ -973,6 +978,11 @@ class AdUnit extends Mads {
             this.offsetX = 0;
             this.offsetY = 0;
             this.onDrag = false;
+            this.rotation = 0;
+            this.zoom = this.cWidth * 0.15;
+            console.log(this.zoom);
+            this.zp = document.getElementById('zp-img');
+            this.zm = document.getElementById('zm-img');
             const v = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
             this.ctx.scale(-1, 1);
             v.x = -this.cWidth;
@@ -982,20 +992,27 @@ class AdUnit extends Mads {
             this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
 
             console.log('should write new face');
-
+            console.log(v);
+            this.drawRotatedimage = (dimage, midX, midY, angle, x, y, width, height) => {
+              this.ctx.save();
+              this.ctx.translate(midX, midY);
+              this.ctx.rotate(angle * Math.PI / 180);
+              this.ctx.drawImage(dimage, x, y, width, height);
+              this.ctx.restore();
+            };
             this.moveFace = () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
               v.x = this.touchX - this.offsetX;
               v.y = this.touchY - this.offsetY;
               this.ctx.scale(-1, 1);
-              this.ctx.drawImage(image, v.x, v.y, v.width, v.height);
+              // this.ctx.drawImage(image, v.x, v.y, v.width, v.height);
+              this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
               this.ctx.scale(-1, 1);
             };
 
             console.log(this.elems['upload-canvas']);
             this.elems['upload-canvas'].addEventListener('mousedown', (ev) => {
-              console.log(v.x);
               this.touchX = ev.clientX - this.rect.left;
               this.touchY = ev.clientY - this.rect.top;
               this.offsetX = this.touchX - v.x;
@@ -1035,7 +1052,30 @@ class AdUnit extends Mads {
             this.elems['upload-canvas'].addEventListener('touchend', () => {
               this.onDrag = false;
             });
+            
+            this.zp.addEventListener('click', () => {
+              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+              v.width += this.zoom;
+              v.height += this.zoom;
+              v.x -= this.zoom / 2;
+              v.y -= this.zoom / 2;
+              this.ctx.scale(-1, 1);
+              this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
+              this.ctx.scale(-1, 1);
+            });
 
+            this.zm.addEventListener('click', () => {
+              this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+              this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+              v.width -= this.zoom;
+              v.height -= this.zoom;
+              v.x += this.zoom / 2;
+              v.y += this.zoom / 2;
+              this.ctx.scale(-1, 1);
+              this.drawRotatedimage(image, 0, 0, this.rotation, v.x, v.y, v.width, v.height);
+              this.ctx.scale(-1, 1);
+            });
             // this.activeRegion = ZingTouch.Region(this.elems['upload-page']);
 
             // this.activeRegion.bind(this.elems['upload-canvas'], 'pan', (x) => {

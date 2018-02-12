@@ -672,3 +672,7 @@ h1, h2 {
     transition: all 1s;
     left: -100%;
 }
+
+.img-tools img {
+    padding: 5px;
+}
