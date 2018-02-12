@@ -4,7 +4,7 @@ import Mads, { fadeOutIn } from 'mads-custom';
 import { contain } from 'intrinsic-scale';
 import html2canvas from 'html2canvas';
 import series from 'async/series';
-import ZingTouch from 'zingtouch';
+// import ZingTouch from 'zingtouch';
 import { trim } from './js/custom';
 import './css/game.css';
 import './main.css';
@@ -967,23 +967,85 @@ class AdUnit extends Mads {
         reader.onload = (e) => {
           const image = new window.Image();
           image.onload = () => {
+            this.rect = this.elems['upload-canvas'].getBoundingClientRect();
+            this.touchX = 0;
+            this.touchY = 0;
+            this.offsetX = 0;
+            this.offsetY = 0;
+            this.onDrag = false;
             const v = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
+            this.ctx.scale(-1, 1);
+            v.x = -this.cWidth;
             this.ctx.drawImage(image, v.x, v.y, v.width, v.height);
+            this.ctx.scale(-1, 1);
             const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
             this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
 
             console.log('should write new face');
 
-            this.activeRegion = ZingTouch.Region(this.elems['upload-page']);
-
-            this.activeRegion.bind(this.elems['upload-canvas'], 'pan', (x) => {
+            this.moveFace = () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-              this.dragX = -(x.detail.events[0].x - (this.cWidth + v.x));
-              this.dragY = x.detail.events[0].y - this.cHeight;
-              this.ctx.drawImage(image, this.dragX,
-                this.dragY, v.width, v.height);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+              v.x = this.touchX - this.offsetX;
+              v.y = this.touchY - this.offsetY;
+              this.ctx.scale(-1, 1);
+              this.ctx.drawImage(image, v.x, v.y, v.width, v.height);
+              this.ctx.scale(-1, 1);
+            };
+
+            console.log(this.elems['upload-canvas']);
+            this.elems['upload-canvas'].addEventListener('mousedown', (ev) => {
+              console.log(v.x);
+              this.touchX = ev.clientX - this.rect.left;
+              this.touchY = ev.clientY - this.rect.top;
+              this.offsetX = this.touchX - v.x;
+              this.offsetY = this.touchY - v.y;
+              this.onDrag = true;
             });
+
+            this.elems['upload-canvas'].addEventListener('touchstart', (ev) => {
+              this.touchX = ev.touches[0].clientX - this.rect.left;
+              this.touchY = ev.touches[0].clientY - this.rect.top;
+              this.offsetX = this.touchX - v.x;
+              this.offsetY = this.touchY - v.y;
+              this.onDrag = true;
+            });
+
+            this.elems['upload-canvas'].addEventListener('mousemove', (ev) => {
+              if (this.onDrag) {
+                this.touchX = ev.clientX - this.rect.left;
+                this.touchY = ev.clientY - this.rect.top;
+                this.moveFace();
+              }
+            });
+
+            this.elems['upload-canvas'].addEventListener('touchmove', (ev) => {
+              if (this.onDrag) {
+                e.preventDefault();
+                this.touchX = ev.touches[0].clientX - this.rect.left;
+                this.touchY = ev.touches[0].clientY - this.rect.top;
+                this.moveFace();
+              }
+            });
+
+            this.elems['upload-canvas'].addEventListener('mouseup', () => {
+              this.onDrag = false;
+            });
+
+            this.elems['upload-canvas'].addEventListener('touchend', () => {
+              this.onDrag = false;
+            });
+
+            // this.activeRegion = ZingTouch.Region(this.elems['upload-page']);
+
+            // this.activeRegion.bind(this.elems['upload-canvas'], 'pan', (x) => {
+            //   this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
+            //   this.dragX = -(x.detail.events[0].x - (this.cWidth + v.x));
+            //   this.dragY = x.detail.events[0].y - this.cHeight;
+            //   this.ctx.drawImage(image, this.dragX,
+            //     this.dragY, v.width, v.height);
+            //   this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
+            // });
 
             this.elems['btn-upload-next'].addEventListener('click', () => {
               this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
