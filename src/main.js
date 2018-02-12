@@ -292,6 +292,7 @@ class AdUnit extends Mads {
       <div id="workspace"></div>
       <div id="loading-page" style="color:white;display:none;">
         <h1 id="loading-text">Loading...</h1>
+        <div id="progressbar"><div id="progress" ><div id="pbaranim"></div></div></div>
       </div>
     `;
   }
