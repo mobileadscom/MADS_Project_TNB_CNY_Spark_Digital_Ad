@@ -681,7 +681,7 @@ class AdUnit extends Mads {
                 greetingImg.className = 'greetingImg';
                 greetingImg.onload = () => {
                   this.elems.workspace.appendChild(greetingImg);
-                  this.elems['loading-page'].style.display = 'none';
+                  // this.elems['loading-page'].style.display = 'none';
                   html2canvas(this.elems.workspace).then((c) => {
                     callback(null, { result: trim(c).toDataURL('image/png') });
                   });

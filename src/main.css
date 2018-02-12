@@ -628,7 +628,9 @@ h1, h2 {
 }
 
 @media (min-width: 1024px) {
-
+    #slider .slick-slide.slick-center img {
+        width: 20%;
+    }
     #slider .slick-slide.slick-center:before {
         width: 230px;
     }
