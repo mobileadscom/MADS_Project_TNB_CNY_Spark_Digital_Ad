@@ -864,6 +864,8 @@ class AdUnit extends Mads {
                 this.elems['greeting-page'].style.display = 'none';
                 this.elems['share-page'].style.display = 'block';
                 this.elems['share-page'].style.opacity = '1';
+                this.elems['share-page'].style.minHeight = '350px';
+                this.elems['share-page'].style.overflow = 'auto';
                 this.elems['end-page'].style.display = 'none';
                 this.elems['loading-page'].style.display = 'none';
               });
