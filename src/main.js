@@ -47,6 +47,13 @@ class AdUnit extends Mads {
             }, '*');
             this.orientation = 'portrait';
           }
+          if (event.data.auth.type == 'closeExpandable') {
+            if (this.video.player) {
+              if (this.video.player.getPlayerState() == '1' || this.video.player.getPlayerState() == '3') {
+                this.video.player.pauseVideo();
+              }
+            }
+          }
         }
       }
     }, false);
