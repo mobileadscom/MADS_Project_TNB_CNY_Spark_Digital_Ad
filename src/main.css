@@ -285,10 +285,11 @@ h1, h2 {
 
 .share-intent {
     display: flex;
+    justify-content: center;
 }
 
 .share-intent > div {
-    width: 50%;
+    width: 18em;
 }
 
 .share-right img {
