@@ -437,6 +437,10 @@ class AdUnit extends Mads {
   }
 
   events() {
+    if (window.location.hostname == "thecomingtogether.com.my") {
+      this.elems['clickthrough'].style.display = 'none';
+    }
+
     this.elems['btn-start-game'].addEventListener('mousedown', () => {
       this.tracker('E', 'start_game');
       this.elems['game-page'].style.display = 'none';
