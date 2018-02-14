@@ -47,6 +47,13 @@ class AdUnit extends Mads {
             }, '*');
             this.orientation = 'portrait';
           }
+          if (event.data.auth.type == 'closeExpandable') {
+            if (this.video.player) {
+              if (this.video.player.getPlayerState() == '1' || this.video.player.getPlayerState() == '3') {
+                this.video.player.pauseVideo();
+              }
+            }
+          }
         }
       }
     }, false);
@@ -241,7 +248,7 @@ class AdUnit extends Mads {
             </div>
         </div>
         <div id="greeting-page" style="display:none;" class="greeting-show">
-            <div style="height:100%;">
+            <div style="height:100%;position: relative; min-height:320px;">
               <h1><small>STEP 2</small>MAKE A WISH FOR YOUR FRIEND</h1>
               <div id="slider">
                   <div><img src="img/sc05-text-white-01.svg" alt="" rel="1"></div>
@@ -500,6 +507,7 @@ class AdUnit extends Mads {
       this.elems['progressbar'].style.display = 'none';
       setTimeout(() => {
         fadeOutIn(this.elems['upload-page'], this.elems['greeting-page'], { display: 'block' });
+        this.elems['sharing-page'].style.minHeight = '320px';
         if (this.withCamera) {
           this.elems['upload-video'].pause();
           if (this.stopVideo) this.stopVideo();
@@ -666,8 +674,10 @@ class AdUnit extends Mads {
 
     this.elems['btn-greeting-next'].addEventListener('mousedown', () => {
       this.tracker('E', 'finish_greeting');
+      this.elems['sharing-page'].style.minHeight = 'initial';
       this.elems['loading-page'].style.display = 'flex';
       this.elems['progressbar'].style.display = 'block';
+      this.elems['progressbar'].style.bottom = (this.elems['loading-page'].clientHeight * 0.1 + 163).toString() + 'px';
       series({
         gif8: (callback) => {
           try {
@@ -864,6 +874,8 @@ class AdUnit extends Mads {
                 this.elems['greeting-page'].style.display = 'none';
                 this.elems['share-page'].style.display = 'block';
                 this.elems['share-page'].style.opacity = '1';
+                this.elems['share-page'].style.minHeight = '350px';
+                this.elems['share-page'].style.overflow = 'auto';
                 this.elems['end-page'].style.display = 'none';
                 this.elems['loading-page'].style.display = 'none';
               });
