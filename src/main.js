@@ -278,6 +278,7 @@ class AdUnit extends Mads {
                      <a href="#" target="_blank" id="a-share-fb"><img id="share-fb" src="img/share-fb.png" alt=""></a>
                      <a href="#" target="_blank" id="a-share-twitter"><img id="share-twitter" src="img/share-twitter.png" alt=""></a>
                      <a href="data:image/jpeg;base64,/9j/4AAQSkZ..." target="_blank" id="share-download" download="tnb_share.gif"><img src="img/share-download.png" alt=""></a>
+                     <a href="https://thecomingtogether.com.my/" target="_blank" id="clickthrough"><img src="img/clickthrough-icon.png" alt=""></a>
                   </div>
                   <button class="start-now invert" id="btn-edit-greeting">EDIT GREETING</button>
               </div>
@@ -980,6 +981,10 @@ class AdUnit extends Mads {
       this.tracker('E', 'download');
       this.elems['share-page'].style.display = 'none';
       this.elems['end-page'].style.display = 'flex';
+    });
+
+    this.elems['clickthrough'].addEventListener('click', () => {
+      this.tracker('E', 'clickthrough');
     });
 
     this.elems['input-gallery-file'].addEventListener('change', () => {
