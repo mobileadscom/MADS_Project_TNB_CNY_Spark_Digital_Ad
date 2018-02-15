@@ -28,6 +28,10 @@ class AdUnit extends Mads {
     this.orientation = 'portrait';
     this.title = 'The Coming Together';
     this.description = 'Our family is the light of our life. Tenaga National Berhad wishes Gong Xi Fa Cai to those celebrating.';
+    if (window.location.hostname == "thecomingtogether.com.my") {
+      this.custTracker = ['https://www.cdn.serving1.net/a/analytic.htm?uid=0&isNew={{isNew}}&referredUrl={{referredUrl}}&rmaId={{rmaId}}&domainId=0&pageLoadId={{pageLoadId}}&userId={{userId}}&pubUserId=0&campaignId={{campaignId}}&browser={{browser}}&os={{os}}&domain={{domain}}&callback=trackSuccess&callback=trackSuccess&type={{rmatype}}&tt={{rmatt}}&value={{rmavalue}}']
+    }
+
     // this.loadCSS(this.resolve('css/game.css'));
   }
 
@@ -58,8 +62,7 @@ class AdUnit extends Mads {
       }
     }, false);
 
-    return `
-      
+    return `  
       <div id="portrait-page" class="portrait-show">
           <img src="img/the-coming-together2.svg" style="width:50%;" alt="">
           <img src="img/more-ong-tilt2.png" class="img-fluid" alt="">
@@ -201,7 +204,13 @@ class AdUnit extends Mads {
             </div>
           </div>  
       </div>
-      <div id="sharing-intro-page" style="display:none;" class="sharing-intro-show">
+      <div id="append-here"></div>
+    `;
+  }
+
+  renderAfterTilt() {
+    this.content.querySelector('#append-here').innerHTML = `
+    <div id="sharing-intro-page" style="display:none;" class="sharing-intro-show">
           <div class="sharing-left">
             <h1>Chinese New Year becomes brighter when we are all in it together <small>Personalise your own greeting and share with friends in 3 simple steps!</small></h1>
             <div class="sharing-icons">
@@ -302,21 +311,14 @@ class AdUnit extends Mads {
         <h1 id="loading-text">Loading...</h1>
         <div id="progressbar"><div id="progress" ><div id="pbaranim"></div></div></div>
       </div>
-    `;
-  }
+    `
 
-  postRender() {
-    if (!this.isMobile) {
-      this.elems['video-page'].style.width = '80%';
-      this.elems['video-page'].style.height = '80%';
-      this.elems['desktop-logo'].style.width = '100%';
-    }
-
-    this.videoPage = document.getElementById('video-page');
-    this.gamePage = document.getElementById('game-page');
-    this.sharingIntroPage = document.getElementById('sharing-intro-page');
+    this.content.querySelector('#append-here').querySelectorAll('*').forEach((elem) => {
+      if (elem.id) {
+        this.elems[elem.id] = elem;
+      }
+    });
     this.ctx = this.elems['upload-canvas'].getContext('2d');
-
     this.cWidth = this.elems['upload-canvas'].offsetWidth;
     this.cHeight = this.elems['upload-canvas'].offsetHeight;
     this.elems['upload-canvas'].width = this.cWidth;
@@ -326,11 +328,18 @@ class AdUnit extends Mads {
       const c = contain(this.cWidth, this.cHeight, this.elems['dragon-face'].width, this.elems['dragon-face'].height);
       this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
     };
+    this.applyEvents();
+  }
 
-    let nonce = false;
+  postRender() {
+    if (!this.isMobile) {
+      this.elems['video-page'].style.width = '80%';
+      this.elems['video-page'].style.height = '80%';
+      this.elems['desktop-logo'].style.width = '100%';
+    }
 
     this.loadJS(this.resolve('js/ytcomponent.js')).then(() => {
-      console.log(typeof window.ytComponent !== 'undefined' ? 'ytComponent loaded' : 'ytComponent not loaded');
+      let nonce = false;
       this.video = new window.ytComponent({ // eslint-disable-line
         container: 'video-frame',
         videoId: 'jpqT1dNOAp8', // 'IGQBtbKSVhY', // 'jpqT1dNOAp8',
@@ -341,7 +350,7 @@ class AdUnit extends Mads {
           rel: 0,
           enablejsapi: 1,
           modestbranding: 1,
-          fs:0
+          fs: 0
         },
         tracker: (...args) => {
           console.log('tracker', args);
@@ -350,11 +359,12 @@ class AdUnit extends Mads {
         progress: (time, { player }) => {
           if (time > 35 && !this.allowContinue) {
             player.pauseVideo();
-            this.videoPage.style.zIndex = 0;
-            this.videoPage.style.display = 'none';
-            this.gamePage.style.zIndex = 1;
-            this.gamePage.style.visibility = 'visible';
+            this.elems['video-page'].style.zIndex = 0;
+            this.elems['video-page'].style.display = 'none';
+            this.elems['game-page'].style.zIndex = 1;
+            this.elems['game-page'].style.visibility = 'visible';
             this.elems['skip-video'].style.display = 'block';
+            this.renderAfterTilt();
           }
         },
         playing: () => {
@@ -367,7 +377,7 @@ class AdUnit extends Mads {
         },
         onFinish: () => {
           if (!nonce) {
-            fadeOutIn(this.elems.start, this.sharingIntroPage, { display: 'flex' });
+            fadeOutIn(this.elems.start, this.elems['sharing-intro-page'], { display: 'flex' });
             nonce = true;
           }
         },
@@ -386,11 +396,7 @@ class AdUnit extends Mads {
   }
 
   style() {
-    console.log('elements', this.elems);
-
-    const links = [];
-
-    return [...links, `
+    return [`
       @font-face {
         font-family: MyriadPro;
         src: url(fonts/MyriadPro-Regular.otf);
@@ -437,11 +443,8 @@ class AdUnit extends Mads {
   }
 
   events() {
-    if (window.location.hostname == "thecomingtogether.com.my") {
-      this.elems['clickthrough'].style.display = 'none';
-    }
-
     this.elems['btn-start-game'].addEventListener('mousedown', () => {
+      console.log('started gaming')
       this.tracker('E', 'start_game');
       this.elems['game-page'].style.display = 'none';
       this.elems.gameContainer.style.zIndex = 200;
@@ -449,9 +452,9 @@ class AdUnit extends Mads {
         console.log(typeof window.game !== 'undefined' ? 'game loaded' : 'game not loaded');
         window.game.init();
         window.game.continue = () => {
-          this.videoPage.style.zIndex = 1;
-          this.videoPage.style.display = 'block';
-          this.gamePage.style.zIndex = 0;
+          this.elems['video-page'].style.zIndex = 1;
+          this.elems['video-page'].style.display = 'block';
+          this.elems['game-page'].style.zIndex = 0;
           this.allowContinue = true;
           this.video.player.playVideo();
           this.elems.gameContainer.style.zIndex = -100;
@@ -461,12 +464,19 @@ class AdUnit extends Mads {
         };
       });
     });
+  };
+
+  applyEvents() {
+    console.log('applied events');
+    if (window.location.hostname == "thecomingtogether.com.my") {
+      this.elems['clickthrough'].style.display = 'none';
+    }
 
     this.elems['btn-start-sharing'].addEventListener('mousedown', () => {
       this.tracker('E', 'start_sharing');
       this.elems['upload-page'].style.display = 'flex';
       this.elems['upload-page'].style.opacity = '1';
-      fadeOutIn(this.sharingIntroPage, this.elems['sharing-page'], { display: 'block' });
+      fadeOutIn(this.elems['sharing-intro-page'], this.elems['sharing-page'], { display: 'block' });
       this.elems['upload-page'].style.display = 'flex';
       this.elems['upload-page'].style.opacity = 1;
       this.elems.uploading.style.display = 'flex';
@@ -849,7 +859,7 @@ class AdUnit extends Mads {
             workerScript: this.resolve('js/gif.worker.js'),
           });
           // [gif1, gif2, gif3, gif4, gif5, gif6, gif7, gif8]
-            [gif5, gif6, gif7, gif8].forEach((img, index) => {
+          [gif5, gif6, gif7, gif8].forEach((img, index) => {
             const i = new window.Image();
             i.onload = () => {
               gif.addFrame(i);
@@ -951,8 +961,8 @@ class AdUnit extends Mads {
       //   console.log(typeof window.game !== 'undefined' ? 'game loaded' : 'game not loaded');
       this.elems.gameContinue.innerText = 'Continue';
       window.game.continue = () => {
-        // this.videoPage.style.zIndex = 1;
-        // this.gamePage.style.zIndex = 0;
+        // this.elems['videoPage'].style.zIndex = 1;
+        // this.elems['gamePage'].style.zIndex = 0;
         // this.allowContinue = true;
         // this.video.player.playVideo();
         this.elems.start.style.display = 'none';
@@ -1038,7 +1048,7 @@ class AdUnit extends Mads {
               // this.ctx.scale(-1, 1);
               this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
             };
-            
+
             if (!this.addedEvent) {
               this.elems['upload-canvas'].addEventListener('mousedown', (ev) => {
                 this.touchX = ev.clientX - this.rect.left;
@@ -1085,11 +1095,11 @@ class AdUnit extends Mads {
                 this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
                 this.rotation += 30;
                 // this.ctx.scale(-1, 1);
-                this.drawRotatedimage(this.image,  (v.x + v.width / 2), v.y + v.height / 2, this.rotation,  -v.width / 2, -v.height / 2, v.width, v.height);
+                this.drawRotatedimage(this.image, (v.x + v.width / 2), v.y + v.height / 2, this.rotation, -v.width / 2, -v.height / 2, v.width, v.height);
                 // this.ctx.scale(-1, 1);
                 this.ctx.drawImage(this.elems['dragon-face'], c.x, c.y, c.width, c.height);
               });
-              
+
               this.zp.addEventListener('click', () => {
                 this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
                 v.width += this.zoom;
@@ -1103,7 +1113,7 @@ class AdUnit extends Mads {
               });
 
               this.zm.addEventListener('click', () => {
-                this.ctx.clearRect(0, 0, this.cWidth, this.cHeight); 
+                this.ctx.clearRect(0, 0, this.cWidth, this.cHeight);
                 v.width -= this.zoom;
                 v.height -= this.zoom;
                 v.x += this.zoom / 2;
@@ -1158,8 +1168,8 @@ class AdUnit extends Mads {
           console.log(typeof window.game !== 'undefined' ? 'game loaded' : 'game not loaded');
           window.game.init();
           window.game.continue = () => {
-            this.videoPage.style.zIndex = 1;
-            this.gamePage.style.zIndex = 0;
+            this.elems['video-page'].style.zIndex = 1;
+            this.elems['game-page'].style.zIndex = 0;
             this.allowContinue = true;
             this.video.player.playVideo();
             this.elems.gameContainer.style.zIndex = -100;
@@ -1168,7 +1178,7 @@ class AdUnit extends Mads {
       }
       this.tracker('E', 'skip_video');
       this.video.player.stopVideo();
-      fadeOutIn(this.elems.start, this.sharingIntroPage, { display: 'flex' });
+      fadeOutIn(this.elems.start, this.elems['sharing-intro-page'], { display: 'flex' });
     });
   }
 }
