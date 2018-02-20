@@ -29,7 +29,16 @@ class AdUnit extends Mads {
     this.title = 'The Coming Together';
     this.description = 'Our family is the light of our life. Tenaga National Berhad wishes Gong Xi Fa Cai to those celebrating.';
     if (window.location.hostname == "thecomingtogether.com.my") {
-      this.custTracker = ['https://www.cdn.serving1.net/a/analytic.htm?uid=0&isNew={{isNew}}&referredUrl={{referredUrl}}&rmaId={{rmaId}}&domainId=0&pageLoadId={{pageLoadId}}&userId={{userId}}&pubUserId=0&campaignId={{campaignId}}&browser={{browser}}&os={{os}}&domain={{domain}}&callback=trackSuccess&callback=trackSuccess&type={{rmatype}}&tt={{rmatt}}&value={{rmavalue}}']
+      window.rma = {
+        ct: '{CLICK_URL}',
+        tags: {
+          'dsp': 'MyDSP',
+          'exchange': '{EXCHANGE}',
+          'inventory': '{DOMAIN}',
+          'uniqueId': '{ADVERTISING_ID}{IDFA}'
+        }
+      };
+      this.custTracker = [`https://www.cdn.serving1.net/a/analytic.htm?uid=0&isNew={{isNew}}&referredUrl={{referredUrl}}&rmaId=7&domainId=0&pageLoadId=${this.pgId}&userId=4220&pubUserId=0&campaignId=79040eea7f38ec5ead80977d15cda54a&browser={{browser}}&os={{os}}&domain={{domain}}&callback=trackSuccess&callback=trackSuccess&type={{rmatype}}&tt={{rmatt}}&value={{rmavalue}}`]
     }
 
     // this.loadCSS(this.resolve('css/game.css'));
